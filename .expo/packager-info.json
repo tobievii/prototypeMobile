@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": "https://zr-drq.anonymous.native.exp.direct",
-  "packagerNgrokUrl": "https://packager.zr-drq.anonymous.native.exp.direct",
-  "ngrokPid": 10596
+  "packagerPort": 19001,
+  "packagerPid": 23484,
+  "expoServerNgrokUrl": "https://zr-drq.anonymous.prototypemobile.exp.direct",
+  "packagerNgrokUrl": "https://packager.zr-drq.anonymous.prototypemobile.exp.direct",
+  "ngrokPid": 21140
 }
