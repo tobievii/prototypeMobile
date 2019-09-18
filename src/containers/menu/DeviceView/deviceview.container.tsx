@@ -104,15 +104,17 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                 rightControls={this.Controls("right")}
                 style={{ position: "relative", backgroundColor: "#262626" }}
             ></TopNavigation>
-            <KeyboardAvoidingView
-                behavior="padding">
+            <ScrollView>
                 <ScrollView>
                     <ScrollView>
                         <DataView {...deviceprops} />
                     </ScrollView >
+                    <KeyboardAvoidingView
+                behavior="padding">
                     {this.widgetDisplay()}
+                    </KeyboardAvoidingView>
                 </ScrollView >
-            </KeyboardAvoidingView>
+            </ScrollView>
         </View >
         );
     }

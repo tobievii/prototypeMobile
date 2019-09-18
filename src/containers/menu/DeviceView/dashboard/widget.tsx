@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { Text, View, TouchableHighlight, ScrollView, TextInput, AsyncStorage, Alert, Button, TouchableOpacity } from 'react-native';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { Text, View, TouchableHighlight, ScrollView, TextInput, AsyncStorage, Alert, TouchableOpacity } from 'react-native';
+import { FontAwesome, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Calendar } from './calendar';
 import { WidgetButton } from './widgetButton'
+import { ColorPicker, fromHsv } from 'react-native-color-picker'
 import { url, version } from '../../../../app.component'
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
@@ -12,21 +13,50 @@ export class Widget extends Component {
         showmenu;
         widgetTitle;
         widgetState;
-        text;
+        command;
         buttonText;
+        color;
+        colorPickerState;
+        buttonState;
+        background;
+        colorPicker;
     }
     _menu = null;
 
     componentWillMount() {
-        this.setState({ showmenu: "none", widgetTitle: this.props['widget'].type, widgetState: "white", buttonText: this.props['widget'].options.buttonText })
+        this.setState({ showmenu: "none", widgetTitle: this.props['widget'].type, widgetState: "white", colorPickerState: "none", buttonState: "" })
         if (this.props['widget'].type == "widgetButton" || this.props['widget'].type == "button") {
+            if (!this.props['widget'].options) {
+                this.props['widget'].options = {}
+            }
             if (this.props['widget'].options) {
                 if (this.props['widget'].options.command) {
-                    this.setState({ text: this.props['widget'].options.command })
+                    this.setState({ command: this.props['widget'].options.command })
                 }
-            }
-            else {
-                this.setState({ text: JSON.stringify({ "foo": true }) })
+                else if (!this.props['widget'].options.command) {
+                    this.setState({ command: JSON.stringify({ "foo": true }) })
+                }
+
+                if (this.props['widget'].options.buttonText) {
+                    this.setState({ buttonText: this.props['widget'].options.buttonText })
+                }
+                else if (!this.props['widget'].options.buttonText) {
+                    this.setState({ buttonText: "SEND" })
+                }
+
+                if (this.props['widget'].options.color) {
+                    this.setState({ color: this.props['widget'].options.color })
+                }
+                else if (!this.props['widget'].options.color) {
+                    this.setState({ color: "#111111" })
+                }
+
+                if (this.props['widget'].options.background) {
+                    this.setState({ background: this.props['widget'].options.background })
+                }
+                else if (!this.props['widget'].options.background) {
+                    this.setState({ background: "#11cc88" })
+                }
             }
         }
     }
@@ -48,11 +78,11 @@ export class Widget extends Component {
         try {
             fetch(url + "/api/" + version + "/data/post", {
                 method: "POST", headers: { 'Authorization': user.auth, "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({ id: this.props['device'].id, data: JSON.parse(this.state.text) })
+                body: JSON.stringify({ id: this.props['device'].id, data: JSON.parse(this.state.command) })
             }).then(response => response.json()).then(resp => {
                 Alert.alert(
                     'Command Sent',
-                    this.state.text,
+                    this.state.command,
                     [{ text: 'Cancel', onPress: () => console.log(''), style: 'cancel', },
                     { text: 'OK', onPress: () => console.log('') },
                     ],
@@ -67,29 +97,28 @@ export class Widget extends Component {
 
     menuState = () => {
         if (this.state.showmenu == null || !this.state.showmenu || this.state.showmenu == "" || this.state.showmenu == undefined) {
-            this.setState({ showmenu: "none" })
-            this.setState({ widgetState: "white" })
+            this.setState({ showmenu: "none", widgetState: "white", buttonState: "" })
         }
         else {
-            this.setState({ showmenu: "" })
-            this.setState({ widgetState: "red" })
+            this.setState({ showmenu: "", widgetState: "red", buttonState: "none" })
         }
     }
 
     widget = () => {
+        var options = this.state
         var deviceprops =
         {
             data: this.props['device'],
-            widget: this.props['widget'],
+            widget: options,
             onClick: this.onClick,
         }
         if (this.state.widgetTitle == "Calendar" || this.state.widgetTitle == "calendar") {
-            return (<ScrollView horizontal={true}  >
+            return (<ScrollView horizontal={true} style={{ display: this.state.buttonState }} >
                 <Calendar {...deviceprops} />
             </ScrollView>)
         }
         else if (this.state.widgetTitle == "widgetButton" || this.state.widgetTitle == "button") {
-            return (<View key={this.props['widget'].i} >
+            return (<View key={this.props['widget'].i} style={{ display: this.state.buttonState }}>
                 <WidgetButton {...deviceprops} />
             </View>)
         }
@@ -102,41 +131,140 @@ export class Widget extends Component {
         }
     }
 
-    showCommandText = async () => {
+    showCommandText = async (button) => {
         for (var widget in this.props['device'].layout) {
             if (this.props['device'].layout[widget].i == this.props['widget'].i) {
-                this.props['device'].layout[widget].options.command = this.state.text
+                if (button == "save") {
+                    this.props['device'].layout[widget].options.command = this.state.command
+                    this.props['device'].layout[widget].options.buttonText = this.state.buttonText
+                    this.props['device'].layout[widget].options.color = this.state.color
+                    this.props['device'].layout[widget].options.background = this.state.background
+                }
+                else {
+                    this.props['device'].layout.splice(widget, 1)
+                }
             }
         }
         const user = JSON.parse(await AsyncStorage.getItem('user'));
-        try {
-            fetch(url + "/api/" + version + "/data/post", {
-                method: "POST", headers: { 'Authorization': user.auth, "Accept": "application/json", "Content-Type": "application/json" },
-                body: JSON.stringify({ key: this.props['device'].key, layout: this.props['device'].layout })
-            }).then(response => response.json()).then(resp => {
-            })
+        if (button == "save") {
+            try {
+                fetch(url + "/api/" + version + "/data/post", {
+                    method: "POST", headers: { 'Authorization': user.auth, "Accept": "application/json", "Content-Type": "application/json" },
+                    body: JSON.stringify({ key: this.props['device'].key, layout: this.props['device'].layout })
+                }).then(response => response.json()).then(resp => {
+                })
+            }
+            catch (err) {
+                return console.error(err.toString());
+            }
         }
-        catch (err) {
-            return console.error(err.toString());
+        else {
+            try {
+                fetch(url + "/api/" + version + "/stateupdate", {
+                    method: "POST", headers: { 'Authorization': user.auth, "Accept": "application/json", "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: { key: this.props['device'].key }, update: { $set: { layout: this.props['device'].layout } } })
+                }).then(response => response.json()).then(resp => {
+                })
+            }
+            catch (err) {
+                return console.error(err.toString());
+            }
         }
+    }
+
+    backgroundColor = () => {
+        return (
+            <View style={{ flexDirection: "row", width: "100%" }}>
+                <View style={{ alignContent: "flex-start" }}>
+                    <Text style={{ color: "white", fontSize: 20 }}>Background:</Text></View>
+                <TextInput
+                    placeholder={this.state.background}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={(background) => this.setState({ background })}
+                    value={this.state.background}
+                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} >
+                </TextInput>
+                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "70%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "background" }) }}>
+                    <View style={{}} />
+                </TouchableHighlight>
+            </View>)
+    }
+
+    buttonTextColor = () => {
+        return (
+            <View style={{ flexDirection: "row", width: "100%" }}>
+                <View style={{ alignContent: "flex-start" }}>
+                    <Text style={{ color: "white", fontSize: 20 }}>Color:</Text></View>
+                <TextInput
+                    placeholder={this.state.buttonText}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={(color) => this.setState({ color })}
+                    value={this.state.color}
+                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} >
+                </TextInput>
+                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "70%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "color" }) }}>
+                    <View style={{}} />
+                </TouchableHighlight>
+            </View>)
+    }
+
+    buttonText = () => {
+        return (
+            <View style={{ flexDirection: "row", width: "100%" }}>
+                <View style={{ alignContent: "flex-start" }}>
+                    <Text style={{ color: "white", fontSize: 20 }}>ButtonText:</Text>
+                </View>
+                <TextInput
+                    placeholder={this.state.buttonText}
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={(buttonText) => this.setState({ buttonText })}
+                    value={this.state.buttonText}
+                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} />
+            </View>)
+    }
+
+    buttons() {
+        return (
+            <View style={{ flexDirection: "row", width: "100%" }}>
+                <View style={{ marginBottom: 10, justifyContent: "flex-end" }}>
+                    <TouchableOpacity onPress={() => this.showCommandText("save")} >
+                        <Text style={{ backgroundColor: "black", color: "white", fontSize: 20, }} >
+                            <MaterialIcons name="save" size={20} color="white" />
+                            SAVE
+                            </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{ marginBottom: 10 }}>
+                    <TouchableOpacity onPress={() => this.showCommandText("remove")} >
+                        <Text style={{ backgroundColor: "black", color: "white", fontSize: 20, marginLeft: 10 }} >
+                            <MaterialIcons name="delete" size={20} color="white" />
+                            REMOVE
+                            </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>)
     }
 
     textinput = () => {
         if (this.state.widgetTitle == "widgetButton" || this.state.widgetTitle == "button") {
             return (
                 <View>
+                    {this.buttons()}
+                    {this.backgroundColor()}
+                    {this.buttonTextColor()}
+                    {this.buttonText()}
                     <View style={{ flexDirection: "row", width: "100%" }}>
-                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white" }}>Command:</Text></View>
-                        <View style={{ alignItems: "flex-end", marginLeft: "60%" }}>
-                            <TouchableOpacity onPress={this.showCommandText} >
-                                <Text style={{ backgroundColor: "black", color: "white", fontSize: 20 }} >Apply</Text>
-                            </TouchableOpacity></View></View>
+                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white", fontSize: 20 }}>Command:</Text></View>
+                    </View>
                     <TextInput
-                        placeholder={this.state.text}
+                        placeholder={this.state.command}
                         multiline={true}
                         numberOfLines={4}
-                        onChangeText={(text) => this.setState({ text })}
-                        value={this.state.text}
+                        onChangeText={(command) => this.setState({ command })}
+                        value={this.state.command}
                         style={{ height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} />
                 </View>
             )
@@ -145,9 +273,9 @@ export class Widget extends Component {
     }
 
     openMenu = () => {
-        if (this.state.showmenu !== "none") {
+        if (this.state.showmenu !== "none" && this.state.colorPickerState == "none") {
             return (
-                <View style={{ backgroundColor: "#262626", width: "100%", height: "100%", display: this.state.showmenu }}>
+                <View style={{ backgroundColor: "#262626", width: "100%", height: "50%", display: this.state.showmenu }}>
                     {/* <Picker style={{ backgroundColor: "black", height: "40%", borderWidth: 5, borderColor: "#262626" }} mode="dialog"
                     onValueChange={(itemValue) =>
                         this.setState({ widgetTitle: itemValue })}>
@@ -168,7 +296,7 @@ export class Widget extends Component {
                     <Menu
                         ref={this.setMenuRef}
                         button={
-                            <Text onPress={this.showMenu} style={{ backgroundColor: "black", color: "white", width: "40%", height: "50%", fontSize: 20 }}>
+                            <Text onPress={this.showMenu} style={{ backgroundColor: "black", color: "white", width: "40%", height: "60%", fontSize: 20 }}>
                                 {this.state.widgetTitle}<AntDesign name="caretdown" size={20} color="white" /> </Text>}>
                         <MenuItem onPress={() => { this.hideMenu(), this.setState({ widgetTitle: "Calendar" }), this.menuState() }}>Calendar</MenuItem>
                         <MenuItem onPress={() => { this.hideMenu(), this.setState({ widgetTitle: "widgetButton" }), this.menuState() }}>WidgetButton</MenuItem>
@@ -177,13 +305,42 @@ export class Widget extends Component {
                         <MenuItem onPress={this.hideMenu}>Coming soon...</MenuItem>
                     </Menu>
                     {this.textinput()}
-                </View>)
+                </View>
+            )
         }
+        else {
+            return (
+                null
+            )
+        }
+    }
+
+    setColor = (color) => {
+        if (this.state.colorPicker == "color") {
+            this.setState({ color: color })
+        }
+        else if (this.state.colorPicker == "background") {
+            this.setState({ background: color })
+        }
+    }
+
+    colorPicker = () => {
+        if (this.state.widgetTitle == "widgetButton" || this.state.widgetTitle == "button") {
+            return (<View style={{ display: this.state.colorPickerState, height: "80%" }}>
+                <TouchableHighlight onPress={() => { this.setState({ colorPickerState: "none" }) }}>
+                    <FontAwesome name="close" size={25} color={this.state.widgetState} />
+                </TouchableHighlight>
+                <ColorPicker
+                    onColorChange={color => { this.setColor(fromHsv(color)) }}
+                    style={{ flex: 1, display: this.state.colorPickerState }} />
+            </View>)
+        }
+        else null
     }
 
     render() {
         return (
-            <View style={{ backgroundColor: "#262626", width: 375, height: 300 }}>
+            <View style={{ backgroundColor: "#262626", width: 375, height: 350 }}>
                 <View style={{ backgroundColor: "black", width: "100%", height: 35, flexDirection: "row" }}>
                     <View style={{ width: "50%" }}>
                         <Text style={{ color: "white", fontSize: 25, marginLeft: 10 }}>{this.state.widgetTitle}</Text></View>
@@ -197,6 +354,7 @@ export class Widget extends Component {
                 </View>
                 {this.openMenu()}
                 {this.widget()}
+                {this.colorPicker()}
             </View >
         )
     }
