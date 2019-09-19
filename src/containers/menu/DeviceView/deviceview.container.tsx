@@ -61,8 +61,9 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                         widget: this.state.widgetLayout[i],
                         key: i
                     }
-                    return (
+                    return (<View key={i} style={{ width: "100%" }}>
                         <Widget {...deviceprops} />
+                    </View>
                     )
                 }
                 )
@@ -95,7 +96,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         var deviceprops = {
             data: this.state.device
         }
-        return (<View style={{ height: "100%", backgroundColor: '#202020' }}>
+        return (<View style={{ height: "100%", backgroundColor: 'rgba(0,0,0,0.8)' }}>
             <TopNavigation
                 alignment='center'
                 title={this.state.device['id'].toString()}
@@ -104,14 +105,14 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                 rightControls={this.Controls("right")}
                 style={{ position: "relative", backgroundColor: "#262626" }}
             ></TopNavigation>
-            <ScrollView>
+            <ScrollView style={{ backgroundColor: "rgba(0,0,0,0.8)", padding: 10 }}>
                 <ScrollView>
-                    <ScrollView>
+                    <ScrollView style={{ backgroundColor: "#202020" }}>
                         <DataView {...deviceprops} />
                     </ScrollView >
                     <KeyboardAvoidingView
-                behavior="padding">
-                    {this.widgetDisplay()}
+                        behavior="padding">
+                        {this.widgetDisplay()}
                     </KeyboardAvoidingView>
                 </ScrollView >
             </ScrollView>

@@ -113,12 +113,12 @@ export class Widget extends Component {
             onClick: this.onClick,
         }
         if (this.state.widgetTitle == "Calendar" || this.state.widgetTitle == "calendar") {
-            return (<ScrollView horizontal={true} style={{ display: this.state.buttonState }} >
+            return (<ScrollView horizontal={true} style={{ display: this.state.buttonState, height: "130%" }} >
                 <Calendar {...deviceprops} />
             </ScrollView>)
         }
         else if (this.state.widgetTitle == "widgetButton" || this.state.widgetTitle == "button") {
-            return (<View key={this.props['widget'].i} style={{ display: this.state.buttonState }}>
+            return (<View key={this.props['widget'].i} style={{ display: this.state.buttonState, height: "90%" }}>
                 <WidgetButton {...deviceprops} />
             </View>)
         }
@@ -176,16 +176,16 @@ export class Widget extends Component {
         return (
             <View style={{ flexDirection: "row", width: "100%" }}>
                 <View style={{ alignContent: "flex-start" }}>
-                    <Text style={{ color: "white", fontSize: 20 }}>Background:</Text></View>
+                    <Text style={{ color: "white", fontSize: 17 }}>BackGround:</Text></View>
                 <TextInput
                     placeholder={this.state.background}
                     multiline={true}
                     numberOfLines={4}
                     onChangeText={(background) => this.setState({ background })}
                     value={this.state.background}
-                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} >
+                    style={{ width: 219, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", marginTop: 0 }} >
                 </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "70%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "background" }) }}>
+                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "background" }) }}>
                     <View style={{}} />
                 </TouchableHighlight>
             </View>)
@@ -193,18 +193,18 @@ export class Widget extends Component {
 
     buttonTextColor = () => {
         return (
-            <View style={{ flexDirection: "row", width: "100%" }}>
+            <View style={{ flexDirection: "row", width: "auto" }}>
                 <View style={{ alignContent: "flex-start" }}>
-                    <Text style={{ color: "white", fontSize: 20 }}>Color:</Text></View>
+                    <Text style={{ color: "white", fontSize: 17 }}>Color:</Text></View>
                 <TextInput
                     placeholder={this.state.buttonText}
                     multiline={true}
-                    numberOfLines={4}
+                    numberOfLines={1}
                     onChangeText={(color) => this.setState({ color })}
                     value={this.state.color}
-                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} >
+                    style={{ width: 275, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} >
                 </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "70%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "color" }) }}>
+                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "color" }) }}>
                     <View style={{}} />
                 </TouchableHighlight>
             </View>)
@@ -214,33 +214,33 @@ export class Widget extends Component {
         return (
             <View style={{ flexDirection: "row", width: "100%" }}>
                 <View style={{ alignContent: "flex-start" }}>
-                    <Text style={{ color: "white", fontSize: 20 }}>ButtonText:</Text>
+                    <Text style={{ color: "white", fontSize: 17 }}>ButtonText:</Text>
                 </View>
                 <TextInput
                     placeholder={this.state.buttonText}
                     multiline={true}
-                    numberOfLines={4}
+                    numberOfLines={1}
                     onChangeText={(buttonText) => this.setState({ buttonText })}
                     value={this.state.buttonText}
-                    style={{ width: "50%", height: "100%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} />
+                    style={{ width: 231, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
             </View>)
     }
 
     buttons() {
         return (
-            <View style={{ flexDirection: "row", width: "100%" }}>
-                <View style={{ marginBottom: 10, justifyContent: "flex-end" }}>
+            <View style={{ flexDirection: "row", width: "100%", marginTop: 5 }}>
+                <View >
                     <TouchableOpacity onPress={() => this.showCommandText("save")} >
-                        <Text style={{ backgroundColor: "black", color: "white", fontSize: 20, }} >
-                            <MaterialIcons name="save" size={20} color="white" />
+                        <Text style={{ backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", fontSize: 15, }} >
+                            <MaterialIcons name="save" size={14} color="white" />
                             SAVE
                             </Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginBottom: 10 }}>
+                <View >
                     <TouchableOpacity onPress={() => this.showCommandText("remove")} >
-                        <Text style={{ backgroundColor: "black", color: "white", fontSize: 20, marginLeft: 10 }} >
-                            <MaterialIcons name="delete" size={20} color="white" />
+                        <Text style={{ backgroundColor: "black", color: "white", fontSize: 15, marginLeft: 10, borderColor: "#262626", borderWidth: 1 }} >
+                            <MaterialIcons name="delete" size={14} color="white" />
                             REMOVE
                             </Text>
                     </TouchableOpacity>
@@ -251,13 +251,13 @@ export class Widget extends Component {
     textinput = () => {
         if (this.state.widgetTitle == "widgetButton" || this.state.widgetTitle == "button") {
             return (
-                <View>
+                <View style={{ backgroundColor: "rgba(0,0,0,0.)" }}>
                     {this.buttons()}
                     {this.backgroundColor()}
                     {this.buttonTextColor()}
                     {this.buttonText()}
                     <View style={{ flexDirection: "row", width: "100%" }}>
-                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white", fontSize: 20 }}>Command:</Text></View>
+                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white", fontSize: 15 }}>Command:</Text></View>
                     </View>
                     <TextInput
                         placeholder={this.state.command}
@@ -265,7 +265,7 @@ export class Widget extends Component {
                         numberOfLines={4}
                         onChangeText={(command) => this.setState({ command })}
                         value={this.state.command}
-                        style={{ height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 5, color: "white" }} />
+                        style={{ width: 325, height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
                 </View>
             )
         }
@@ -275,7 +275,7 @@ export class Widget extends Component {
     openMenu = () => {
         if (this.state.showmenu !== "none" && this.state.colorPickerState == "none") {
             return (
-                <View style={{ backgroundColor: "#262626", width: "100%", height: "50%", display: this.state.showmenu }}>
+                <View style={{ backgroundColor: "#262626", width: 280, height: "58%", display: this.state.showmenu }}>
                     {/* <Picker style={{ backgroundColor: "black", height: "40%", borderWidth: 5, borderColor: "#262626" }} mode="dialog"
                     onValueChange={(itemValue) =>
                         this.setState({ widgetTitle: itemValue })}>
@@ -296,8 +296,8 @@ export class Widget extends Component {
                     <Menu
                         ref={this.setMenuRef}
                         button={
-                            <Text onPress={this.showMenu} style={{ backgroundColor: "black", color: "white", width: "40%", height: "60%", fontSize: 20 }}>
-                                {this.state.widgetTitle}<AntDesign name="caretdown" size={20} color="white" /> </Text>}>
+                            <Text onPress={this.showMenu} style={{ backgroundColor: "black", color: "white", width: "40%", height: "auto", fontSize: 17, marginTop: 5 }}>
+                                {this.state.widgetTitle}<AntDesign name="caretdown" size={15} color="white" /> </Text>}>
                         <MenuItem onPress={() => { this.hideMenu(), this.setState({ widgetTitle: "Calendar" }), this.menuState() }}>Calendar</MenuItem>
                         <MenuItem onPress={() => { this.hideMenu(), this.setState({ widgetTitle: "widgetButton" }), this.menuState() }}>WidgetButton</MenuItem>
                         <MenuItem onPress={this.hideMenu} disabled>Blank</MenuItem>
@@ -340,13 +340,13 @@ export class Widget extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: "#262626", width: 375, height: 350 }}>
-                <View style={{ backgroundColor: "black", width: "100%", height: 35, flexDirection: "row" }}>
+            <View style={{ backgroundColor: "#262626", width: 375, height: 280 }}>
+                <View style={{ backgroundColor: "black", width: "100%", height: 30, flexDirection: "row" }}>
                     <View style={{ width: "50%" }}>
                         <Text style={{ color: "white", fontSize: 25, marginLeft: 10 }}>{this.state.widgetTitle}</Text></View>
                     <View style={{ width: "50%", alignItems: "flex-end" }}>
                         <TouchableHighlight onPress={() => this.menuState()}>
-                            <Text style={{ backgroundColor: "black", marginRight: 10, height: "100%" }}>
+                            <Text style={{ backgroundColor: "black", marginRight: 20, height: "100%" }}>
                                 <FontAwesome name="wrench" size={25} color={this.state.widgetState} />
                             </Text>
                         </TouchableHighlight>
