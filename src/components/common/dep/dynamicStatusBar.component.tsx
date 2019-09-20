@@ -13,6 +13,7 @@ import {
 } from 'react-native-ui-kitten';
 import { ThemeKey } from '../../../../src/core/themes';
 import Constants from 'expo-constants';
+import { theme } from '../../../app.component'
 
 interface ComponentProps {
   currentTheme: ThemeKey;
@@ -21,9 +22,8 @@ interface ComponentProps {
 export type DynamicStatusBarProps = ThemedComponentProps & ViewProps & ComponentProps;
 
 class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
-
   private getStatusBarContent = (): StatusBarStyle => {
-    if (this.props.currentTheme === 'Storm Trooper') {
+    if (this.props.currentTheme === 'Storm Trooper' || theme.backgroundColor !== "#262626") {
       return 'dark-content';
     } else {
       return 'light-content';
@@ -32,14 +32,13 @@ class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
 
   public render(): React.ReactNode {
     const { themedStyle } = this.props;
-
     const androidStatusBarBgColor: string = themedStyle.container.backgroundColor;
     const barStyle: StatusBarStyle = this.getStatusBarContent();
 
     return (
       <View style={themedStyle.container}>
         <StatusBar
-          backgroundColor={"#262626"}
+          backgroundColor={theme.backgroundColor}
           barStyle={barStyle}
         />
       </View>
@@ -47,9 +46,9 @@ class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
   }
 }
 
-export const DynamicStatusBar = withStyles(DynamicStatusBarComponent, (theme: ThemeType) => ({
+export const DynamicStatusBar = withStyles(DynamicStatusBarComponent, () => ({
   container: {
-    backgroundColor: "#262626",
+    backgroundColor: theme.backgroundColor,
     height: Platform.select({
       ios: Constants.statusBarHeight,
       android: 0,

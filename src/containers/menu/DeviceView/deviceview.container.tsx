@@ -6,7 +6,7 @@ import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { textStyle } from '@src/components/common'
 import { Widget } from './dashboard/widget';
 import { DataView } from './dashboard/dataView'
-import { url, version } from '../../../app.component'
+import { url, version, theme } from '../../../app.component'
 var data;
 export class DeviceViewContainer extends React.Component<NavigationScreenProps> {
     state: {
@@ -61,9 +61,9 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                         widget: this.state.widgetLayout[i],
                         key: i
                     }
-                    return (<View key={i} style={{ width: "100%" }}>
+                    return (<View key={i} style={{ width: "100%" }} >
                         <Widget {...deviceprops} />
-                    </View>
+                    </ View>
                     )
                 }
                 )
@@ -71,7 +71,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         }
         else
             return (
-                <View ><Text style={{ color: "white" }}>No widgets to display.....</Text></View>
+                <View ><Text style={{ color: theme.color }}>No widgets to display.....</Text></View>
             )
     }
 
@@ -79,14 +79,14 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         if (control == "left") {
             return (<View>
                 <TouchableOpacity style={{ opacity: 0.7 }} onPress={() => this.props.navigation.goBack(null)}>
-                    <Feather name="chevron-left" size={32} color="white" />
+                    <Feather name="chevron-left" size={32} color={theme.color} />
                 </TouchableOpacity>
             </View>)
         }
         else if (control == "right") {
             return (<View>
                 <TouchableOpacity style={{ opacity: 0.7 }} >
-                    <MaterialIcons name="save" size={32} color="white" />
+                    <MaterialIcons name="save" size={32} color={theme.color} />
                 </TouchableOpacity>
             </View>)
         }
@@ -103,11 +103,11 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                 leftControl={this.Controls("left")}
                 titleStyle={textStyle.subtitle}
                 rightControls={this.Controls("right")}
-                style={{ position: "relative", backgroundColor: "#262626" }}
+                style={{ position: "relative", backgroundColor: theme.backgroundColor }}
             ></TopNavigation>
-            <ScrollView style={{ backgroundColor: "rgba(0,0,0,0.8)", padding: 10 }}>
+            <ScrollView style={{ backgroundColor: theme.backgroundColor, padding: 8 }}>
                 <ScrollView>
-                    <ScrollView style={{ backgroundColor: "#202020" }}>
+                    <ScrollView style={{ backgroundColor: "#202020", paddingBottom: 5 }}>
                         <DataView {...deviceprops} />
                     </ScrollView >
                     <KeyboardAvoidingView

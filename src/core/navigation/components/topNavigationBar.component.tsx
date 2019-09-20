@@ -17,6 +17,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { SearchBar } from 'react-native-elements';
 var devices = require('../../../containers/menu/devices');
 import { ScrollView } from 'react-native-gesture-handler';
+import { theme } from '../../../app.component'
 export interface ComponentProps {
   backIcon?: BackIconProp;
   onBackPress?: () => void;
@@ -84,10 +85,10 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
     if (control == "left") {
       return (<View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={{ marginRight: 20, opacity: 0.7 }} >
-          <MaterialIcons name="add" size={32} color="white" />
+          <MaterialIcons name="add" size={32} color={theme.color} />
         </TouchableOpacity>
         <TouchableOpacity style={{ opacity: 0.7 }} onPress={() => { this.openSearchBar() }}>
-          <MaterialIcons name="search" size={32} color="white" />
+          <MaterialIcons name="search" size={32} color={theme.color} />
         </TouchableOpacity>
       </View>)
     }
@@ -95,13 +96,13 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
     else if (control == "right") {
       return (<View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
-          <MaterialIcons name="person" size={32} color="white" />
+          <MaterialIcons name="person" size={32} color={theme.color} />
         </TouchableOpacity >
         <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }} >
-          <MaterialIcons name="settings" size={32} color="white" />
+          <MaterialIcons name="settings" size={32} color={theme.color} />
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
-          <MaterialIcons name="notifications" size={32} color="white" />
+          <MaterialIcons name="notifications" size={32} color={theme.color} />
         </TouchableOpacity>
       </View>)
     }
@@ -111,7 +112,10 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
     var { data } = this.state;
     if (this.state.search.length > 0) {
       return (
-        <FlatList data={data} style={{ height: "100%" }} renderItem={({ item }) => <TouchableHighlight style={{ height: 50, borderColor: '#6c757d', borderBottomWidth: 1, backgroundColor: "#262626" }} onPress={() => this.deviceData(item)}><View style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2 }} ><Text style={{ width: '70%', color: '#ffffff', marginLeft: 10, marginTop: 15 }}>{item["id"]}</Text></View></TouchableHighlight>
+        <FlatList data={data} style={{ height: "100%" }} renderItem={({ item }) =>
+          <TouchableHighlight style={{ height: 50, borderColor: '#6c757d', borderBottomWidth: 1, backgroundColor: theme.backgroundColor }} onPress={() => this.deviceData(item)}>
+            <View style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2 }} >
+              <Text style={{ width: '70%', color: theme.color, marginLeft: 10, marginTop: 15 }}>{item["id"]}</Text></View></TouchableHighlight>
         } keyExtractor={item => item["id"]} />
       )
     }
@@ -124,7 +128,7 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
       return (<SafeAreaView style={themedStyle.safeArea}>
         <TopNavigation
           alignment='center'
-          style={{ backgroundColor: "#262626" }}
+          style={{ backgroundColor: theme.backgroundColor }}
           subtitleStyle={textStyle.caption1}
           leftControl={this.Control("left")}
           rightControls={this.Control("right")}
@@ -137,11 +141,11 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
           <SearchBar
             placeholder="Type Here..."
             platform={this.state.platform}
-            searchIcon={{ name: 'ios-search', color: "white", type: 'ionicon' }}
+            searchIcon={{ name: 'ios-search', color: theme.color, type: 'ionicon' }}
             cancelIcon={{ name: 'ios-arrow-back', color: "red", type: 'ionicon' }}
             clearIcon={{ name: "ios-close-circle", color: "red", type: 'ionicon' }}
-            containerStyle={{ backgroundColor: "#262626" }}
-            inputStyle={{ backgroundColor: 'white' }}
+            containerStyle={{ backgroundColor: theme.backgroundColor }}
+            inputStyle={{ backgroundColor: theme.color, color: theme.color }}
             onChangeText={this.updateSearch}
             value={this.state.search}
             cancelButtonProps={{ color: "red" }}

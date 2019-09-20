@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage
+} from 'react-native'
 import { Themes } from './favorites.component';
 import {
   ThemeContextType,
@@ -7,8 +13,36 @@ import {
   themes,
 } from '@src/core/themes';
 import { Theme } from './type';
-
+import SwitchToggle from 'react-native-switch-toggle';
+export var Themestate = {
+  backgroundColor: "#262626",
+  backgroundColor2: "#202020",
+  color: "white",
+  value: false
+}
 export class FavoritesContainer extends React.Component {
+  state = {
+    switchOn3: false,
+    backgrounColor: ""
+  };
+  componentWillMount() {
+    this.getTheme()
+  }
+
+  getTheme = async () => {
+    var theme = await AsyncStorage.getItem('Theme')
+    theme = JSON.parse(theme)
+    if (theme == null) {
+      this.setState({ switchOn3: false })
+    }
+    else {
+      this.setState({ switchOn3: theme['value'] })
+    }
+  }
+
+  removeTheme = async () => {
+    await AsyncStorage.removeItem('Theme')
+  }
 
   private EXCLUDE_THEMES: ThemeKey[] = [
     'App Theme',
@@ -41,11 +75,66 @@ export class FavoritesContainer extends React.Component {
     );
   };
 
+  onPress3 = () => {
+    this.removeTheme()
+    this.setState({ switchOn3: !this.state.switchOn3 })
+    if (this.state.switchOn3 == true) {
+      var dark = {
+        backgroundColor: "#262626",
+        backgroundColor2: "#202020",
+        color: "white",
+        value: false
+      }
+      AsyncStorage.setItem('Theme', JSON.stringify(dark))
+    }
+    else {
+      var light = {
+        backgroundColor: "white",
+        backgroundColor2: "white",
+        color: "black",
+        value: true
+      }
+      AsyncStorage.setItem('Theme', JSON.stringify(light))
+    }
+  }
+
   public render(): React.ReactNode {
     return (
-      <ThemeContext.Consumer>
-        {this.renderContent}
-      </ThemeContext.Consumer>
+      <View style={{ flexDirection: "row" }}>
+        <Text style={{ color: "black" }}>Dark Mode</Text>
+        <SwitchToggle
+          containerStyle={{
+            marginTop: 16,
+            width: 140,
+            height: 65,
+            borderRadius: 30,
+            padding: 5,
+          }}
+          backgroundColorOn='grey'
+          backgroundColorOff='grey'
+          circleStyle={{
+            width: 55,
+            height: 55,
+            borderRadius: 27.5,
+            backgroundColor: 'blue', // rgb(102,134,205)
+          }}
+          switchOn={this.state.switchOn3}
+          onPress={() => { this.onPress3() }}
+          circleColorOff='#262626'
+          circleColorOn='white'
+          duration={500}
+        />
+        <Text style={{ color: "white" }}>Light Mode</Text>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+});

@@ -332,7 +332,7 @@ export class Widget extends Component {
                 </TouchableHighlight>
                 <ColorPicker
                     onColorChange={color => { this.setColor(fromHsv(color)) }}
-                    style={{ flex: 1, display: this.state.colorPickerState }} />
+                    style={{ flex: 1, display: this.state.colorPickerState, width: "95%" }} />
             </View>)
         }
         else null

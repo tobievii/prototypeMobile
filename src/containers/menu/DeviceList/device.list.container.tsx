@@ -3,7 +3,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { AsyncStorage, ScrollView, Text, View, TouchableHighlight } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 const devices = require('../devices');
-import { url, version } from '../../../app.component'
+import { url, version, theme } from '../../../app.component'
 export class DeviceListContainer extends React.Component<NavigationScreenProps> {
 
   state = {
@@ -59,7 +59,7 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
   devices() {
     if (this.state.data.length > 0) {
       return (
-        <ScrollView style={{ backgroundColor: "#202020" }}>
+        <ScrollView style={{ backgroundColor: theme.backgroundColor2 }}>
           {
             this.state.data.map((item, key) =>
               <TouchableHighlight style={{ height: 50, borderColor: '#6c757d', borderBottomWidth: 1 }} key={key}
@@ -68,7 +68,7 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
                   <CheckBox
                     checked={item.checked} checkedColor='limegreen' onPress={() => this.onCheckChanged(item.id)}
                   />
-                  <Text style={{ width: '70%', color: '#ffffff', marginLeft: 10, marginTop: 15 }} >{item.id}</Text>
+                  <Text style={{ width: '70%', color: theme.color, marginLeft: 10, marginTop: 15 }} >{item.id}</Text>
                 </View>
               </TouchableHighlight >,
             )
@@ -77,9 +77,9 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
       );
     } else {
       return (
-        <ScrollView style={{ backgroundColor: "#202020" }}>
-          <TouchableHighlight style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2, height: 50, borderColor: '#6c757d', borderBottomWidth: 1 }} onPress={() => { this.getDeviceList() }}>
-            <Text style={{ width: '70%', color: '#ffffff', marginLeft: 100, marginTop: 15, opacity: 0.5 }} >
+        <ScrollView style={{ backgroundColor: theme.backgroundColor2 }}>
+          <TouchableHighlight style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2, height: 50, borderColor: theme.color, borderBottomWidth: 1 }} onPress={() => { this.getDeviceList() }}>
+            <Text style={{ width: '70%', color: theme.color, marginLeft: 100, marginTop: 15, opacity: 0.5 }} >
               No devices to display.</Text>
           </TouchableHighlight>
         </ScrollView>

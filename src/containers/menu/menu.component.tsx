@@ -19,6 +19,7 @@ import {
   Settings
 } from '@src/assets/icons';
 import { themes } from '@src/core/themes';
+import { theme } from '../../app.component'
 
 interface ComponentProps {
   selectedIndex: number;
@@ -39,7 +40,7 @@ class MenuComponent extends React.Component<Props> {
         appearance='noIndicator'
         selectedIndex={this.props.selectedIndex}
         onSelect={this.onTabSelect}
-        style={{ backgroundColor: "#262626" }}>
+        style={{ backgroundColor: theme.backgroundColor }}>
         <BottomNavigationTab
           title='Device List'
           icon={DeviceList}
