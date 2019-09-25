@@ -8,7 +8,14 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
 
   state = {
     data: [],
+    theme,
   };
+
+  componentWillMount() {
+    setInterval(() =>
+      this.setState({ theme: theme })
+      , 1000)
+  }
   private navigationKey: string = 'DeviceListContainer';
   getDeviceList = async () => {
     const user = JSON.parse(await AsyncStorage.getItem('user'));

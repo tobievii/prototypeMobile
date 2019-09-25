@@ -34,10 +34,13 @@ export class FavoritesContainer extends React.Component {
     theme = JSON.parse(theme)
     if (theme == null) {
       this.setState({ switchOn3: false })
+      this.setState({ backgrounColor: "#262626" })
     }
     else {
       this.setState({ switchOn3: theme['value'] })
+      this.setState({ backgrounColor: theme['backgroundColor'] })
     }
+    Themestate = theme
   }
 
   removeTheme = async () => {
@@ -85,6 +88,8 @@ export class FavoritesContainer extends React.Component {
         color: "white",
         value: false
       }
+      Themestate = dark
+      this.setState({ backgrounColor: dark.backgroundColor })
       AsyncStorage.setItem('Theme', JSON.stringify(dark))
     }
     else {
@@ -94,13 +99,18 @@ export class FavoritesContainer extends React.Component {
         color: "black",
         value: true
       }
+      Themestate = light
+      this.setState({ backgrounColor: light.backgroundColor })
       AsyncStorage.setItem('Theme', JSON.stringify(light))
     }
   }
 
   public render(): React.ReactNode {
     return (
-      <View style={{ flexDirection: "row" }}>
+      <View style={{
+        flexDirection: "row",
+        backgroundColor: this.state.backgrounColor, width: "100%", height: "100%"
+      }}>
         <Text style={{ color: "black" }}>Dark Mode</Text>
         <SwitchToggle
           containerStyle={{
@@ -116,7 +126,7 @@ export class FavoritesContainer extends React.Component {
             width: 55,
             height: 55,
             borderRadius: 27.5,
-            backgroundColor: 'blue', // rgb(102,134,205)
+            backgroundColor: "rgb(102,134,205)",
           }}
           switchOn={this.state.switchOn3}
           onPress={() => { this.onPress3() }}
@@ -129,12 +139,3 @@ export class FavoritesContainer extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-});

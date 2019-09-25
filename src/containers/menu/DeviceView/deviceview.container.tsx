@@ -61,7 +61,11 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                         widget: this.state.widgetLayout[i],
                         key: i
                     }
-                    return (<View key={i} style={{ width: "100%" }} >
+                    return (<View key={i} style={{
+                        paddingTop: 10,
+                        shadowColor: "black", shadowOffset: { width: 0, height: 4 },
+                        shadowOpacity: 0.32, shadowRadius: 5.46, elevation: 9
+                    }} >
                         <Widget {...deviceprops} />
                     </ View>
                     )
@@ -96,12 +100,12 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         var deviceprops = {
             data: this.state.device
         }
-        return (<View style={{ height: "100%", backgroundColor: 'rgba(0,0,0,0.8)' }}>
+        return (<View style={{ height: "100%", backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 60 }}>
             <TopNavigation
                 alignment='center'
                 title={this.state.device['id'].toString()}
                 leftControl={this.Controls("left")}
-                titleStyle={textStyle.subtitle}
+                titleStyle={{ color: theme.color }}
                 rightControls={this.Controls("right")}
                 style={{ position: "relative", backgroundColor: theme.backgroundColor }}
             ></TopNavigation>
@@ -120,5 +124,3 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         );
     }
 }
-
-

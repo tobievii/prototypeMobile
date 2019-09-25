@@ -49,6 +49,18 @@ export default class App extends React.Component<{}, State> {
     this.getTheme()
   }
 
+  componentDidMount() {
+    setInterval(() =>
+      this.changeTheme()
+      , 5000)
+  }
+
+  changeTheme = () => {
+    if (Themestate) {
+      theme = Themestate
+    }
+  }
+
   getTheme = async () => {
     var storedtheme = await AsyncStorage.getItem('Theme')
     if (!storedtheme || storedtheme == null) {

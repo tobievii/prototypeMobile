@@ -34,6 +34,12 @@ class MenuComponent extends React.Component<Props> {
     this.props.onTabSelect(index);
   };
 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({ theme })
+    }, 900)
+  }
+
   bottomNav() {
     if (this.props.selectedIndex !== 5) {
       return (<BottomNavigation
@@ -88,5 +94,8 @@ class MenuComponent extends React.Component<Props> {
 export const Menu = withStyles(MenuComponent, (theme: ThemeType) => ({
   safeAreaContainer: {
     backgroundColor: theme['background-basic-color-1'],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
   },
 }));

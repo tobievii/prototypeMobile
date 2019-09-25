@@ -35,12 +35,19 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
     search: ""
     searchbar;
     platform;
+    theme;
   }
 
   componentWillMount() {
     this.setState({ search: "" })
     this.closeSearchBar()
     this.setState({ platform: Platform.OS })
+  }
+
+  componentDidMount() {
+    setInterval(() =>
+      this.setState({ theme: theme })
+      , 1000)
   }
 
   updateSearch = search => {
@@ -95,10 +102,10 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
 
     else if (control == "right") {
       return (<View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
-          <MaterialIcons name="person" size={32} color={theme.color} />
-        </TouchableOpacity >
-        <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }} >
+        <TouchableHighlight style={{ marginLeft: 5, opacity: 0.7 }}>
+          <MaterialIcons name="person" size={32} color={theme.color} onPress={() => { this.props.navigation.navigate('Settings'); }} />
+        </TouchableHighlight>
+        <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }} onPress={() => { this.props.navigation.navigate('Settings'); }} >
           <MaterialIcons name="settings" size={32} color={theme.color} />
         </TouchableOpacity>
         <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
@@ -161,5 +168,8 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
 export const TopNavigationBar = withStyles(TopNavigationBarComponent, (theme: ThemeType) => ({
   safeArea: {
     backgroundColor: theme['background-basic-color-1'],
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
   },
 }));

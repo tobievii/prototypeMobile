@@ -1,9 +1,9 @@
 import React from 'react';
 import { NavigationScreenProps } from 'react-navigation';
 import MapView from 'react-native-maps';
-import {Dimensions, Alert} from 'react-native';
+import { Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const SCREEN_HIGHT = height;
 const SCREEN_WIDTH = width;
@@ -16,7 +16,7 @@ export class SupportContainer extends React.Component<NavigationScreenProps> {
   constructor(props: any) {
     super(props);
 
-    this. state = {
+    this.state = {
       initialPosition: {
         latitude: 0,
         longitude: 0,
@@ -34,22 +34,22 @@ export class SupportContainer extends React.Component<NavigationScreenProps> {
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition((position) => {
-      const lat = parseFloat(position.coords.latitude)
-      const lon = parseFloat(position.coords.longitude)
+      const lat = position.coords.latitude
+      const lon = position.coords.longitude
       const initRegion = {
         latitude: lat,
         longitude: lon,
         latitudeDelta: LATTITUDE_DELTA,
         longitudeDelta: LONGTITUDE_DELTA
       };
-      this.setState({initialPosition: initRegion})
-      this.setState({markedPosition: initRegion})
-    }, (error) => alert(JSON.stringify(error)),
-    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      this.setState({ initialPosition: initRegion })
+      this.setState({ markedPosition: initRegion })
+    }, (error) => console.log(JSON.stringify(error)),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
     this.watchID = navigator.geolocation.watchPosition((position) => {
-      const lat = parseFloat(position.coords.latitude);
-      const lon = parseFloat(position.coords.longitude);
+      const lat = position.coords.latitude
+      const lon = position.coords.longitude
 
       const lastRegion = {
         latitude: lat,
@@ -58,8 +58,8 @@ export class SupportContainer extends React.Component<NavigationScreenProps> {
         longitudeDelta: LATTITUDE_DELTA,
       };
 
-      this.setState({initialPosition: lastRegion});
-      this.setState({markedPosition: lastRegion});
+      this.setState({ initialPosition: lastRegion });
+      this.setState({ markedPosition: lastRegion });
 
     });
   }
@@ -71,9 +71,9 @@ export class SupportContainer extends React.Component<NavigationScreenProps> {
   public render(): React.ReactNode {
     return (
       <MapView
-      style={{flex: 1}}
-      region={this.state.initialPosition}
-      showsUserLocation={true}
+        style={{ flex: 1 }}
+        region={this.state['initialPosition']}
+        showsUserLocation={true}
       />
     );
   }

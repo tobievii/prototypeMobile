@@ -23,7 +23,7 @@ export type DynamicStatusBarProps = ThemedComponentProps & ViewProps & Component
 
 class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
   private getStatusBarContent = (): StatusBarStyle => {
-    if (this.props.currentTheme === 'Storm Trooper' || theme.backgroundColor !== "#262626") {
+    if (this.props.currentTheme === 'Storm Trooper' || theme.backgroundColor == "white") {
       return 'dark-content';
     } else {
       return 'light-content';
@@ -48,7 +48,7 @@ class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
 
 export const DynamicStatusBar = withStyles(DynamicStatusBarComponent, () => ({
   container: {
-    backgroundColor: theme.backgroundColor,
+    backgroundColor: "#262626",//theme.background---after apple fix status bar dark mode overiding content
     height: Platform.select({
       ios: Constants.statusBarHeight,
       android: 0,
