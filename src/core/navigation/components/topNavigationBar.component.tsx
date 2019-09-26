@@ -38,7 +38,7 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
     theme;
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.setState({ search: "" })
     this.closeSearchBar()
     this.setState({ platform: Platform.OS })

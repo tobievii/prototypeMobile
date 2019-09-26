@@ -45,7 +45,7 @@ interface State {
 }
 
 export default class App extends React.Component<{}, State> {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getTheme()
   }
 

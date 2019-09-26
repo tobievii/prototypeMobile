@@ -23,7 +23,7 @@ export class Widget extends Component {
     }
     _menu = null;
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({ showmenu: "none", widgetTitle: this.props['widget'].type, widgetState: "white", colorPickerState: "none", buttonState: "" })
         if (this.props['widget'].type == "widgetButton" || this.props['widget'].type == "button") {
             if (!this.props['widget'].options) {

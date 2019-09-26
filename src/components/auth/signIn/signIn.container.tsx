@@ -10,7 +10,7 @@ export class SignInContainer extends React.Component<NavigationScreenProps> {
   };
   private navigationKey: string = 'SignInContainer';
 
-  componentWillMount = async () => {
+  UNSAFE_componentWillMount = async () => {
     const user = JSON.parse(await AsyncStorage.getItem('user'));
     if (user && user.auth) {
       await fetch(url + '/api/' + version + '/account', {

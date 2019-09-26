@@ -25,7 +25,7 @@ export class FavoritesContainer extends React.Component {
     switchOn3: false,
     backgrounColor: ""
   };
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.getTheme()
   }
 

@@ -19,7 +19,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
 
     private navigationKey: string = 'DeviceViewContainer';
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         var { navigation } = this.props;
         this.setState({ device: navigation.getParam('user') })
         this.widgetLayoutInfo(navigation.getParam('user'))

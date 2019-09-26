@@ -18,7 +18,7 @@ export class Calendar extends Component {
         packets;
     }
 
-    componentWillMount = () => {
+    UNSAFE_componentWillMount = () => {
         this.setState({ data: false })
         this.setState({ packet: [] })
         this.example()

@@ -11,7 +11,7 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
     theme,
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     setInterval(() =>
       this.setState({ theme: theme })
       , 1000)

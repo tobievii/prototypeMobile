@@ -15,7 +15,7 @@ export class DataView extends Component {
         meta;
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({ open: "none" })
         this.setState({ preview: "" })
         this.setState({ meta: "none" })
