@@ -17,7 +17,7 @@ export class DataView extends Component {
 
     UNSAFE_componentWillMount() {
         this.setState({ open: "none" })
-        this.setState({ preview: "" })
+        this.setState({ preview: "flex" })
         this.setState({ meta: "none" })
         this.setState({ arrow: "caretright" })
         this.setState({ arrow2: "caretright" })
@@ -26,19 +26,19 @@ export class DataView extends Component {
     open = (kind) => {
         if (kind == "data") {
             if (this.state.open == "none") {
-                this.setState({ open: "" })
+                this.setState({ open: "flex" })
                 this.setState({ preview: "none" })
                 this.setState({ arrow: "caretdown" })
             }
             else {
                 this.setState({ open: "none" })
-                this.setState({ preview: "" })
+                this.setState({ preview: "flex" })
                 this.setState({ arrow: "caretright" })
             }
         }
         else {
             if (this.state.meta == "none") {
-                this.setState({ meta: "" })
+                this.setState({ meta: "flex" })
                 this.setState({ arrow2: "caretdown" })
             }
             else {
@@ -49,7 +49,7 @@ export class DataView extends Component {
     }
 
     preview = () => {
-        if (this.state.preview == "") {
+        if (this.state.preview == "flex") {
             return (<Text style={{ display: "none", fontSize: 12, width: 10, opacity: 0.3 }}>
                 {JSON.stringify(this.props['data'].data).substr(0, 22) + ".....(Click here to expand)"}
             </Text>)

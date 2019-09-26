@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { Text, View, TouchableHighlight, ScrollView, TextInput, AsyncStorage, Alert, TouchableOpacity } from 'react-native';
+import { Platform, Text, View, TouchableHighlight, TouchableOpacity, ScrollView, TextInput, AsyncStorage, Alert } from 'react-native';
 import { FontAwesome, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { Calendar } from './calendar';
 import { WidgetButton } from './widgetButton'
@@ -20,11 +20,18 @@ export class Widget extends Component {
         buttonState;
         background;
         colorPicker;
+        OStextarea;
     }
     _menu = null;
 
     UNSAFE_componentWillMount() {
-        this.setState({ showmenu: "none", widgetTitle: this.props['widget'].type, widgetState: "white", colorPickerState: "none", buttonState: "" })
+        if (Platform.OS == "android") {
+            this.setState({ OStextarea: 1 })
+        }
+        else {
+            this.setState({ OStextarea: 4 })
+        }
+        this.setState({ showmenu: "none", widgetTitle: this.props['widget'].type, widgetState: "white", colorPickerState: "none", buttonState: "flex" })
         if (this.props['widget'].type == "widgetButton" || this.props['widget'].type == "button") {
             if (!this.props['widget'].options) {
                 this.props['widget'].options = {}
@@ -96,11 +103,11 @@ export class Widget extends Component {
     }
 
     menuState = () => {
-        if (this.state.showmenu == null || !this.state.showmenu || this.state.showmenu == "" || this.state.showmenu == undefined) {
-            this.setState({ showmenu: "none", widgetState: "white", buttonState: "" })
+        if (this.state.showmenu == null || !this.state.showmenu || this.state.showmenu == "flex" || this.state.showmenu == undefined) {
+            this.setState({ showmenu: "none", widgetState: "white", buttonState: "flex" })
         }
         else {
-            this.setState({ showmenu: "", widgetState: "red", buttonState: "none" })
+            this.setState({ showmenu: "flex", widgetState: "red", buttonState: "none" })
         }
     }
 
@@ -180,12 +187,12 @@ export class Widget extends Component {
                 <TextInput
                     placeholder={this.state.background}
                     multiline={true}
-                    numberOfLines={4}
+                    numberOfLines={1}
                     onChangeText={(background) => this.setState({ background })}
                     value={this.state.background}
                     style={{ width: 219, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", marginTop: 0 }} >
                 </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "background" }) }}>
+                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "background" }); console.log("see") }}>
                     <View style={{}} />
                 </TouchableHighlight>
             </View>)
@@ -204,7 +211,7 @@ export class Widget extends Component {
                     value={this.state.color}
                     style={{ width: 275, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} >
                 </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: "", colorPicker: "color" }) }}>
+                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "color" }) }}>
                     <View style={{}} />
                 </TouchableHighlight>
             </View>)
@@ -262,7 +269,7 @@ export class Widget extends Component {
                     <TextInput
                         placeholder={this.state.command}
                         multiline={true}
-                        numberOfLines={4}
+                        numberOfLines={1}
                         onChangeText={(command) => this.setState({ command })}
                         value={this.state.command}
                         style={{ width: 325, height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
@@ -275,7 +282,7 @@ export class Widget extends Component {
     openMenu = () => {
         if (this.state.showmenu !== "none" && this.state.colorPickerState == "none") {
             return (
-                <View style={{ backgroundColor: "#262626", width: 280, height: "58%", display: this.state.showmenu }}>
+                <View style={{ backgroundColor: "#262626", width: 280, height: "58%" }}>
                     {/* <Picker style={{ backgroundColor: "black", height: "40%", borderWidth: 5, borderColor: "#262626" }} mode="dialog"
                     onValueChange={(itemValue) =>
                         this.setState({ widgetTitle: itemValue })}>
@@ -340,7 +347,7 @@ export class Widget extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: "#262626", width: 375, height: 280 }}>
+            <View style={{ backgroundColor: "#262626", width: "100%", height: 280 }}>
                 <View style={{ backgroundColor: "black", width: "100%", height: 30, flexDirection: "row" }}>
                     <View style={{ width: "50%" }}>
                         <Text style={{ color: "white", fontSize: 25, marginLeft: 10 }}>{this.state.widgetTitle}</Text></View>
