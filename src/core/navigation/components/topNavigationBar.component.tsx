@@ -152,7 +152,7 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
             cancelIcon={{ name: 'ios-arrow-back', color: "red", type: 'ionicon' }}
             clearIcon={{ name: "ios-close-circle", color: "red", type: 'ionicon' }}
             containerStyle={{ backgroundColor: theme.backgroundColor }}
-            inputStyle={{ backgroundColor: theme.color, color: theme.color }}
+            inputStyle={{ backgroundColor: theme.color, color: theme.backgroundColor }}
             onChangeText={this.updateSearch}
             value={this.state.search}
             cancelButtonProps={{ color: "red" }}
