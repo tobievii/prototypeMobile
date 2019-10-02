@@ -45,7 +45,7 @@ export class DataView extends Component {
         }
     }
 
-    formatting(data, str) {
+    formatting(data: string | RegExp, str: { replace: (arg0: RegExp, arg1: string) => void; }) {
      data  = JSON.stringify(this.props.data.data);
         const reg = new RegExp(data);
         return str.replace(reg, '');
