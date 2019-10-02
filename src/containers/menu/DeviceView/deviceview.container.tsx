@@ -96,6 +96,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         }
     }
 
+    
     render() {
         var deviceprops = {
             data: this.state.device
