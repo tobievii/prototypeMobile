@@ -180,44 +180,89 @@ export class Widget extends Component {
     }
 
     backgroundColor = () => {
-        return (
-            <View style={{ flexDirection: "row", width: "100%" }}>
-                <View style={{ alignContent: "flex-start" }}>
-                    <Text style={{ color: "white", fontSize: 17 }}>BackGround:</Text></View>
-                <TextInput
-                    placeholder={this.state.background}
-                    multiline={true}
-                    numberOfLines={1}
-                    onChangeText={(background) => this.setState({ background })}
-                    value={this.state.background}
-                    style={{ width: 219, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", marginTop: 0 }} >
-                </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "background" }); console.log("see") }}>
-                    <View style={{}} />
-                </TouchableHighlight>
-            </View>)
+        if (Platform.OS == "android") {
+            return (
+                <View style={{ flexDirection: "row", width: "100%" }}>
+                    <Text style={{ color: "white", fontSize: 17 }}>BackGround:</Text>
+                    <TextInput
+                        placeholder={this.state.background}
+                        multiline={true}
+                        numberOfLines={1}
+                        onChangeText={(background) => this.setState({ background })}
+                        value={this.state.background}
+                        style={{ width: 170, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", marginTop: 0 }} >
+                    </TextInput>
+                    <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "background" }) }}>
+                        <View style={{}} />
+                    </TouchableHighlight>
+                </View>)
+        }
+        else {
+            return (
+                <View style={{ flexDirection: "row", width: "100%" }}>
+                    <View style={{ alignContent: "flex-start" }}>
+                        <Text style={{ color: "white", fontSize: 17 }}>BackGround:</Text></View>
+                    <TextInput
+                        placeholder={this.state.background}
+                        multiline={true}
+                        numberOfLines={1}
+                        onChangeText={(background) => this.setState({ background })}
+                        value={this.state.background}
+                        style={{ width: 219, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white", marginTop: 0 }} >
+                    </TextInput>
+                    <TouchableHighlight style={{ backgroundColor: this.state.background, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "background" }) }}>
+                        <View style={{}} />
+                    </TouchableHighlight>
+                </View>)
+        }
     }
 
     buttonTextColor = () => {
-        return (
-            <View style={{ flexDirection: "row", width: "auto" }}>
-                <View style={{ alignContent: "flex-start" }}>
-                    <Text style={{ color: "white", fontSize: 17 }}>Color:</Text></View>
-                <TextInput
-                    placeholder={this.state.buttonText}
-                    multiline={true}
-                    numberOfLines={1}
-                    onChangeText={(color) => this.setState({ color })}
-                    value={this.state.color}
-                    style={{ width: 275, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} >
-                </TextInput>
-                <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "color" }) }}>
-                    <View style={{}} />
-                </TouchableHighlight>
-            </View>)
+        if (Platform.OS == "android") {
+            return (
+                <View style={{ flexDirection: "row", width: "auto" }}>
+                    <Text style={{ color: "white", fontSize: 17 }}>Color:</Text>
+                    <TextInput
+                        placeholder={this.state.buttonText}
+                        multiline={true}
+                        numberOfLines={1}
+                        onChangeText={(color) => this.setState({ color })}
+                        value={this.state.color}
+                        style={{ width: 223, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} >
+                    </TextInput>
+                    <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "color" }) }}>
+                        <View style={{}} />
+                    </TouchableHighlight>
+                </View>)
+        }
+        else {
+            return (
+                <View style={{ flexDirection: "row", width: "auto" }}>
+                    <View style={{ alignContent: "flex-start" }}>
+                        <Text style={{ color: "white", fontSize: 17 }}>Color:</Text></View>
+                    <TextInput
+                        placeholder={this.state.buttonText}
+                        multiline={true}
+                        numberOfLines={1}
+                        onChangeText={(color) => this.setState({ color })}
+                        value={this.state.color}
+                        style={{ width: 275, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} >
+                    </TextInput>
+                    <TouchableHighlight style={{ backgroundColor: this.state.color, width: "10%", height: "95%", alignContent: "flex-end" }} onPress={() => { this.setState({ colorPickerState: 'flex', colorPicker: "color" }) }}>
+                        <View style={{}} />
+                    </TouchableHighlight>
+                </View>)
+        }
     }
 
     buttonText = () => {
+        var widthOS;
+        if (Platform.OS == "android") {
+            widthOS = 180
+        }
+        else {
+            widthOS = 231
+        }
         return (
             <View style={{ flexDirection: "row", width: "100%" }}>
                 <View style={{ alignContent: "flex-start" }}>
@@ -229,8 +274,38 @@ export class Widget extends Component {
                     numberOfLines={1}
                     onChangeText={(buttonText) => this.setState({ buttonText })}
                     value={this.state.buttonText}
-                    style={{ width: 231, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
+                    style={{ width: widthOS, height: "95%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
             </View>)
+    }
+
+    Command = () => {
+        if (Platform.OS == "android") {
+            return (
+                <TextInput
+                    placeholder="Command"
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={(command) => this.setState({ command })}
+                    value={this.state.command}
+                    style={{ width: 268, height: 40, backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
+            )
+        }
+        else {
+            return (
+                <View>
+                    <View style={{ flexDirection: "row", width: "100%" }}>
+                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white", fontSize: 15 }}>Command:</Text></View>
+                    </View>
+                    <TextInput
+                        placeholder={this.state.command}
+                        multiline={true}
+                        numberOfLines={1}
+                        onChangeText={(command) => this.setState({ command })}
+                        value={this.state.command}
+                        style={{ width: 325, height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
+                </View >
+            )
+        }
     }
 
     buttons() {
@@ -263,16 +338,7 @@ export class Widget extends Component {
                     {this.backgroundColor()}
                     {this.buttonTextColor()}
                     {this.buttonText()}
-                    <View style={{ flexDirection: "row", width: "100%" }}>
-                        <View style={{ alignContent: "flex-start" }}><Text style={{ color: "white", fontSize: 15 }}>Command:</Text></View>
-                    </View>
-                    <TextInput
-                        placeholder={this.state.command}
-                        multiline={true}
-                        numberOfLines={1}
-                        onChangeText={(command) => this.setState({ command })}
-                        value={this.state.command}
-                        style={{ width: 325, height: "50%", backgroundColor: "black", borderColor: "#262626", borderWidth: 1, color: "white" }} />
+                    {this.Command()}
                 </View>
             )
         }
@@ -283,23 +349,6 @@ export class Widget extends Component {
         if (this.state.showmenu !== "none" && this.state.colorPickerState == "none") {
             return (
                 <View style={{ backgroundColor: "#262626", width: 280, height: "58%" }}>
-                    {/* <Picker style={{ backgroundColor: "black", height: "40%", borderWidth: 5, borderColor: "#262626" }} mode="dialog"
-                    onValueChange={(itemValue) =>
-                        this.setState({ widgetTitle: itemValue })}>
-                    <Picker.Item color="grey" label="Calendar" value="Calendar" />
-                    <Picker.Item color="grey" label="NivoLine" value="NivoLine" />
-                    <Picker.Item color="grey" label="ChartLine" value="ChartLine" />
-                    <Picker.Item color="grey" label="Zoomable" value="Zoomable" />
-                    <Picker.Item color="grey" label="Blank" value="Blank" />
-                    <Picker.Item color="grey" label="ThreeDWidget" value="ThreeDWidget" />
-                    <Picker.Item color="grey" label="Gauge" value="Gauge" />
-                    <Picker.Item color="grey" label="mesh" value="mesh" />
-                    <Picker.Item color="grey" label="map" value="map" />
-                    <Picker.Item color="grey" label="form" value="form" />
-                    <Picker.Item color="grey" label="schedular" value="schedular" />
-                    <Picker.Item color="grey" label="widgetButton" value="widgetButton" />
-                    <Picker.Item color="grey" label="chart" value="chart" />
-                </Picker> */}
                     <Menu
                         ref={this.setMenuRef}
                         button={
