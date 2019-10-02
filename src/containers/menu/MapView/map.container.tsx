@@ -4,8 +4,8 @@ import MapView, { Marker } from 'react-native-maps';
 import { Dimensions, Alert, Text } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
-var devices = require('../devices');
-var temp = []
+const devices = require('../devices');
+const temp = [];
 const SCREEN_HIGHT = height;
 const SCREEN_WIDTH = width;
 const ASPECT_RATIO = width / height;
@@ -33,11 +33,11 @@ export class MapViewContainer extends React.Component<NavigationScreenProps> {
   watchID: number = null;
 
   componentDidMount() {
-    this.devicesLocations()
+    this.devicesLocations();
     navigator.geolocation.getCurrentPosition((position) => {
-      var lat = parseFloat(position.coords.latitude);
-      var lon = parseFloat(position.coords.longitude);
-      var initRegion = {
+      const lat = parseFloat(position.coords.latitude);
+      const lon = parseFloat(position.coords.longitude);
+      const initRegion = {
         latitude: lat,
         longitude: lon,
         latitudeDelta: LATTITUDE_DELTA,
@@ -52,9 +52,9 @@ export class MapViewContainer extends React.Component<NavigationScreenProps> {
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
     );
     this.watchID = navigator.geolocation.watchPosition((position) => {
-      var lat = parseFloat(position.coords.latitude);
-      var lon = parseFloat(position.coords.longitude);
-      var lastRegion;
+      const lat = parseFloat(position.coords.latitude);
+      const lon = parseFloat(position.coords.longitude);
+      const lastRegion;
       this.setState({ markedPosition: lastRegion });
 
     });
@@ -66,9 +66,9 @@ export class MapViewContainer extends React.Component<NavigationScreenProps> {
 
   devicesLocations() {
     {
-      for (var i in devices.devices) {
+      for (const i in devices.devices) {
         if (devices.devices[i].data.gps) {
-          temp.push(devices.devices[i])
+          temp.push(devices.devices[i]);
         }
       }
     }
