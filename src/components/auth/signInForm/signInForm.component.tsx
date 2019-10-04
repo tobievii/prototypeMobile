@@ -4,7 +4,7 @@ import { ThemedComponentProps, ThemeType, withStyles } from 'react-native-ui-kit
 import { Button } from 'react-native-ui-kitten';
 import { textStyle, ValidationInput } from '../../../../src/components/common';
 import { EyeOffIconFill, PersonIconFill } from '../../../../src/assets/icons';
-import { PasswordValidator, EmailValidator } from '../../../../src/core/validators';
+import { PasswordValidator, EmailValidator, UsernameValidator } from '../../../../src/core/validators';
 import { SignInFormData } from './type';
 
 interface ComponentProps {
@@ -77,16 +77,16 @@ class SignInForm2Component extends React.Component<SignInFormProps, State> {
         <View style={themedStyle.formContainer}>
           <ValidationInput
             textStyle={textStyle.paragraph}
-            style={{ backgroundColor: "#262626" }}
+            style={{ backgroundColor: '#262626' }}
             placeholder='Username'
             icon={PersonIconFill}
-            validator={EmailValidator}
+            validator={UsernameValidator}
             onChangeText={this.onUsernameInputTextChange}
           />
           <ValidationInput
             style={themedStyle.passwordInput}
             textStyle={textStyle.paragraph}
-            style={{ backgroundColor: "#262626" }}
+            // style={{ backgroundColor: '#262626' }}
             placeholder='Password'
             icon={EyeOffIconFill}
             secureTextEntry={true}
