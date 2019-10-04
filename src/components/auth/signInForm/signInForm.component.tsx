@@ -78,7 +78,7 @@ class SignInForm2Component extends React.Component<SignInFormProps, State> {
           <ValidationInput
             textStyle={textStyle.paragraph}
             style={{ backgroundColor: "#262626" }}
-            placeholder='Username or Email'
+            placeholder='Username'
             icon={PersonIconFill}
             validator={EmailValidator}
             onChangeText={this.onUsernameInputTextChange}
