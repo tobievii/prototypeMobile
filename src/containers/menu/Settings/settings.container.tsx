@@ -121,8 +121,14 @@ const SignStackNavigator = createStackNavigator({
 });
 
 const AppDrawerNavigator = createDrawerNavigator({
-    Admin: {
+    _Admin: {
         screen: DashboardStackNavigator,
+    },
+    get Admin() {
+        return this._Admin;
+    },
+    set Admin(value) {
+        this._Admin = value;
     },
     Account: {
         screen: AccountNavigator,
