@@ -3,7 +3,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { SignInFormData } from '../../../../src/components/auth';
 import { SignIn } from './signIn.component';
 import { AsyncStorage } from 'react-native';
-import { url, version } from '../../../app.component'
+import { url, version } from '../../../app.component';
 export class SignInContainer extends React.Component<NavigationScreenProps> {
   state: {
     view: undefined,
@@ -14,7 +14,7 @@ export class SignInContainer extends React.Component<NavigationScreenProps> {
     const user = JSON.parse(await AsyncStorage.getItem('user'));
     if (user && user.auth) {
       await fetch(url + '/api/' + version + '/account', {
-        //https://8bo.org/api/v4/account
+        // https://8bo.org/api/v4/account
         method: 'GET',
         headers: {
           'Authorization': user.auth,
@@ -34,7 +34,7 @@ export class SignInContainer extends React.Component<NavigationScreenProps> {
 
   private getAccount = async (res: any) => {
     await fetch(url + '/api/' + version + '/account', {
-      //https://8bo.org/api/v4/account
+      // https://8bo.org/api/v4/account
       method: 'GET',
       headers: {
         'Authorization': res.auth,
@@ -51,7 +51,7 @@ export class SignInContainer extends React.Component<NavigationScreenProps> {
 
   private onSignInPress = async (data: SignInFormData) => {
     await fetch(url + '/signin', {
-      //https://8bo.org/signin
+      // https://8bo.org/signin
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -68,7 +68,7 @@ export class SignInContainer extends React.Component<NavigationScreenProps> {
         if (res.signedin === true && res.auth) {
           this.getAccount(res);
         } else {
-          this.props.navigation.navigate('Sign In')
+          this.props.navigation.navigate('Sign In');
         }
       })
       .catch((error) => {
