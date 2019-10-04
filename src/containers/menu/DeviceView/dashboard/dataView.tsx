@@ -150,14 +150,14 @@ export class DataView extends Component {
     }
 
     render() {
-        if (url === 'https://8bo.org') {
-            delete (this.props.data.username);
-            delete (this.props.data._id);
-            delete (this.props.data._recieved);
-            delete (this.props.data.apikey);
-            delete (this.props.data.userpublickey);
-            delete (this.props.data._id);
-        }
+        // if (url === 'https://8bo.org') {
+        //     delete (this.props.data.username);
+        //     delete (this.props.data._id);
+        //     delete (this.props.data._recieved);
+        //     delete (this.props.data.apikey);
+        //     delete (this.props.data.userpublickey);
+        //     delete (this.props.data._id);
+        // }
 
         if (this.props.data) {
             if (this.props.data.payload) {
