@@ -27,7 +27,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
 
     widgetLayoutInfo = async (device) => {
         const user = JSON.parse(await AsyncStorage.getItem('user'));
-        if (url !== "https://8bo.org") {
+        if (url !== 'https://8bo.org') {
             try {
                 const response = await fetch(url + '/api/' + version + '/states/full', {
                     method: 'GET',
@@ -63,7 +63,7 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
                     }
                     return (<View key={i} style={{
                         paddingTop: 10,
-                        shadowColor: "black", shadowOffset: { width: 0, height: 4 },
+                        shadowColor: 'black', shadowOffset: { width: 0, height: 4 },
                         shadowOpacity: 0.32, shadowRadius: 5.46, elevation: 9
                     }} >
                         <Widget {...deviceprops} />
@@ -80,17 +80,17 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
     }
 
     Controls = (control) => {
-        if (control == "left") {
+        if (control == 'left') {
             return (<View>
                 <TouchableOpacity style={{ opacity: 0.7 }} onPress={() => this.props.navigation.goBack(null)}>
-                    <Feather name="chevron-left" size={32} color={theme.color} />
+                    <Feather name='chevron-left' size={32} color={theme.color} />
                 </TouchableOpacity>
             </View>)
         }
-        else if (control == "right") {
+        else if (control == 'right') {
             return (<View>
                 <TouchableOpacity style={{ opacity: 0.7 }} >
-                    <MaterialIcons name="save" size={32} color={theme.color} />
+                    <MaterialIcons name='save' size={32} color={theme.color} />
                 </TouchableOpacity>
             </View>)
         }
@@ -100,22 +100,22 @@ export class DeviceViewContainer extends React.Component<NavigationScreenProps> 
         var deviceprops = {
             data: this.state.device
         }
-        return (<View style={{ height: "100%", backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 60 }}>
+        return (<View style={{ height: '100%', backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: 60 }}>
             <TopNavigation
                 alignment='center'
                 title={this.state.device['id'].toString()}
-                leftControl={this.Controls("left")}
+                leftControl={this.Controls('left')}
                 titleStyle={{ color: theme.color }}
-                rightControls={this.Controls("right")}
-                style={{ position: "relative", backgroundColor: theme.backgroundColor }}
+                rightControls={this.Controls('right')}
+                style={{ position: 'relative', backgroundColor: theme.backgroundColor }}
             ></TopNavigation>
             <ScrollView style={{ backgroundColor: theme.backgroundColor, padding: 8 }}>
                 <ScrollView>
-                    <ScrollView style={{ backgroundColor: "#202020", paddingBottom: 5 }}>
+                    <ScrollView style={{ backgroundColor: '#202020', paddingBottom: 5 }}>
                         <DataView {...deviceprops} />
                     </ScrollView >
                     <KeyboardAvoidingView
-                        behavior="padding">
+                        behavior='padding'>
                         {this.widgetDisplay()}
                     </KeyboardAvoidingView>
                 </ScrollView >
