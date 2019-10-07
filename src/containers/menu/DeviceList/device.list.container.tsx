@@ -1,20 +1,25 @@
 import React from 'react';
 import { NavigationScreenProps } from 'react-navigation';
-import { AsyncStorage, ScrollView, Text, View, TouchableHighlight } from 'react-native';
+import {
+  AsyncStorage,
+  ScrollView,
+  Text,
+  View,
+  TouchableHighlight,
+} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 const devices = require('../devices');
 import { url, version, theme } from '../../../app.component';
-export class DeviceListContainer extends React.Component<NavigationScreenProps> {
-
+export class DeviceListContainer extends React.Component<
+  NavigationScreenProps
+> {
   state = {
     data: [],
     theme,
   };
 
   UNSAFE_componentWillMount() {
-    setInterval(() =>
-      this.setState({ theme: theme })
-      , 1000);
+    setInterval(() => this.setState({ theme: theme }), 1000);
   }
   private navigationKey: string = 'DeviceListContainer';
   getDeviceList = async () => {
@@ -25,8 +30,8 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
         // https://8bo.org/api/v4/states
         method: 'GET',
         headers: {
-          'Authorization': user.auth,
-          'Content-Type': 'application/json',
+          Authorization: user.auth,
+          'Content-Type': 'application/json'
         },
       });
 
@@ -44,13 +49,13 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
     } catch (err) {
       return console.error(err.toString());
     }
-  }
+  };
 
   componentDidMount = () => {
     const { navigation } = this.props;
     this.setState({ user: navigation.getParam('user') });
     this.getDeviceList();
-  }
+  };
 
   onCheckChanged(id: any) {
     const data = this.state.data;
@@ -60,44 +65,79 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
   }
 
   deviceData(item: any) {
-    this.props.navigation.navigate('DeviceView', { 'user': item });
+    this.props.navigation.navigate('DeviceView', { user: item });
   }
 
   devices() {
     if (this.state.data.length > 0) {
       return (
         <ScrollView style={{ backgroundColor: theme.backgroundColor2 }}>
-          {
-            this.state.data.map((item, key) =>
-              <TouchableHighlight style={{ height: 50, borderColor: '#6c757d', borderBottomWidth: 1 }} key={key}
-                onPress={() => this.deviceData(item)}>
-                <View style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2 }} >
-                  <CheckBox
-                    checked={item.checked} checkedColor='limegreen' onPress={() => this.onCheckChanged(item.id)}
-                  />
-                  <Text style={{ width: '70%', color: theme.color, marginLeft: 10, marginTop: 15 }} >{item.id}</Text>
-                </View>
-              </TouchableHighlight >,
-            )
-          }
+          {this.state.data.map((item, key) => (
+            <TouchableHighlight
+              style={{
+                height: 50,
+                borderColor: '#6c757d',
+                borderBottomWidth: 1,
+              }}
+              key={key}
+              onPress={() => this.deviceData(item)}
+            >
+              <View
+                style={{
+                  width: '100%',
+                  marginLeft: 10,
+                  flexDirection: 'row',
+                  marginTop: -2,
+                }}
+              >
+                <CheckBox
+                  checked={item.checked}
+                  checkedColor='limegreen'
+                  onPress={() => this.onCheckChanged(item.id)}
+                />
+                <Text
+                  style={{
+                    width: '70%',
+                    color: theme.color,
+                    marginLeft: 10,
+                    marginTop: 15,
+                  }}
+                >
+                  {item.id}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          ))}
         </ScrollView>
       );
     } else {
       return (
         <ScrollView style={{ backgroundColor: theme.backgroundColor2 }}>
           <TouchableHighlight
-          style={{
-            width: '100%',
-            marginLeft: 10,
-            flexDirection: 'row',
-            marginTop: -2,
-            height: 50,
-            borderColor: theme.color,
-            borderBottomWidth: 1,
-             }}
-             onPress={() => { this.getDeviceList(); }}>
-            <Text style={{ width: '70%', color: theme.color, marginLeft: 100, marginTop: 15, opacity: 0.5 }} >
-              No devices to display.</Text>
+            style={{
+              width: '100%',
+              marginLeft: 10,
+              flexDirection: 'row',
+              marginTop: -2,
+              height: 50,
+              borderColor: theme.color,
+              borderBottomWidth: 1,
+            }}
+            onPress={() => {
+              this.getDeviceList();
+            }}
+          >
+            <Text
+              style={{
+                width: '70%',
+                color: theme.color,
+                marginLeft: 100,
+                marginTop: 15,
+                opacity: 0.5,
+              }}
+            >
+              No devices to display.
+            </Text>
           </TouchableHighlight>
         </ScrollView>
       );
@@ -105,6 +145,6 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
   }
 
   render() {
-    return (this.devices());
+    return this.devices();
   }
 }

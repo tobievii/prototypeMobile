@@ -61,6 +61,7 @@ const IotnxtNavigator = createStackNavigator({
         screen: Iotnxt,
         navigationOptions: ({ navigation }) => {
             return {
+                header: null,
                 headerTitle: 'IoT.nxt Gateways',
                 headerLeft: (
                     <Icon onPress={() => navigation.openDrawer()} name='md-menu' size={30} />

@@ -1,10 +1,14 @@
 import React from 'react';
+import { StyleType, ThemeType, withStyles } from '@kitten/theme';
 import {
-  StyleType,
-  ThemeType,
-  withStyles,
-} from '@kitten/theme';
-import { ImageProps, View, Text, TouchableOpacity, Platform, TouchableHighlight, FlatList } from 'react-native';
+  ImageProps,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  TouchableHighlight,
+  FlatList,
+} from 'react-native';
 import {
   TopNavigation,
   TopNavigationAction,
@@ -18,6 +22,8 @@ import { SearchBar } from 'react-native-elements';
 const devices = require('../../../containers/menu/devices');
 import { ScrollView } from 'react-native-gesture-handler';
 import { theme } from '../../../app.component';
+import { Screen } from 'react-native-screens';
+import Iotnxt from '@src/components/plugins/iotnxt';
 export interface ComponentProps {
   backIcon?: BackIconProp;
   onBackPress?: () => void;
@@ -29,10 +35,12 @@ export type TopNavigationBarProps = TopNavigationProps & ComponentProps;
 type BackIconProp = (style: StyleType) => React.ReactElement<ImageProps>;
 type BackButtonElement = React.ReactElement<TopNavigationActionProps>;
 
-export class TopNavigationBarComponent extends React.Component<TopNavigationBarProps> {
+export class TopNavigationBarComponent extends React.Component<
+  TopNavigationBarProps
+> {
   state: {
     data: null;
-    search: ''
+    search: '';
     searchbar: boolean;
     platform: string;
     theme: any;
@@ -45,32 +53,32 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
   }
 
   componentDidMount() {
-    setInterval(() =>
-      this.setState({ theme: theme })
-      , 1000);
+    setInterval(() => this.setState({ theme: theme }), 1000);
   }
 
   updateSearch = (search: any) => {
     this.setState({ search });
-    const newData = devices.devices.filter((item: { id: { toLowerCase: () => void; }; data: any; }) => {
-      const itemData = `${item.id.toLowerCase()}
+    const newData = devices.devices.filter(
+      (item: { id: { toLowerCase: () => void }; data: any }) => {
+        const itemData = `${item.id.toLowerCase()}
       ${item.data} `;
-      const textData = this.state.search;
-      return itemData.indexOf(textData.toLowerCase()) > -1;
-    });
+        const textData = this.state.search;
+        return itemData.indexOf(textData.toLowerCase()) > -1;
+      },
+    );
     this.setState({ data: newData });
   };
 
   closeSearchBar = () => {
     this.setState({ searchbar: false });
-  }
+  };
 
   openSearchBar = () => {
     this.setState({ searchbar: true });
-  }
+  };
 
   deviceData(item: any) {
-    this.props.navigation.navigate('DeviceView', { 'user': item });
+    this.props.navigation.navigate('DeviceView', { user: item });
   }
 
   private onBackButtonPress = () => {
@@ -81,79 +89,147 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
 
   private renderBackButton = (source: BackIconProp): BackButtonElement => {
     return (
-      <TopNavigationAction
-        icon={source}
-        onPress={this.onBackButtonPress}
-      />
+      <TopNavigationAction icon={source} onPress={this.onBackButtonPress} />
     );
   };
 
   Control = (control: string) => {
     if (control === 'left') {
-      return (<View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={{ marginRight: 20, opacity: 0.7 }} >
-          <MaterialIcons name='add' size={24} color={theme.color} />
-        </TouchableOpacity>
-        <TouchableOpacity style={{ opacity: 0.7 }} onPress={() => { this.openSearchBar(); }}>
-          <MaterialIcons name='search' size={24} color={theme.color} />
-        </TouchableOpacity>
-      </View>);
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableOpacity style={{ marginRight: 20, opacity: 0.7 }}>
+            <MaterialIcons name='add' size={24} color={theme.color} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ opacity: 0.7 }}
+            onPress={() => {
+              this.openSearchBar();
+            }}
+          >
+            <MaterialIcons name='search' size={24} color={theme.color} />
+          </TouchableOpacity>
+        </View>
+      );
     } else if (control == 'right') {
-      return (<View style={{ flexDirection: 'row' }}>
-        <TouchableHighlight style={{ marginLeft: 5, opacity: 0.7 }}>
-          <MaterialIcons name='person' size={24} color={theme.color} onPress={() => { this.props.navigation.navigate('Settings'); }} />
-        </TouchableHighlight>
-        <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }} onPress={() => { this.props.navigation.navigate('Settings'); }} >
-          <MaterialIcons name='settings' size={24} color={theme.color} />
-        </TouchableOpacity>
-        <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
-          <MaterialIcons name='notifications' size={24} color={theme.color} />
-        </TouchableOpacity>
-      </View>);
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <TouchableHighlight style={{ marginLeft: 5, opacity: 0.7 }}>
+            <MaterialIcons
+              name='person'
+              size={24}
+              color={theme.color}
+              onPress={() => {
+                this.props.navigation.navigate('Settings');
+              }}
+            />
+          </TouchableHighlight>
+          <TouchableOpacity
+            style={{ marginLeft: 5, opacity: 0.7 }}
+            onPress={() => {
+              this.props.navigation.navigate('Settings');
+            }}
+          >
+            <MaterialIcons name='settings' size={24} color={theme.color} />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ marginLeft: 5, opacity: 0.7 }}>
+            <MaterialIcons name='notifications' size={24} color={theme.color} />
+          </TouchableOpacity>
+        </View>
+      );
     }
-  }
+  };
 
   searchList = () => {
     const { data } = this.state;
     if (this.state.search.length > 0) {
       return (
-        <FlatList data={data} style={{ height: '100%' }} renderItem={({ item }) =>
-          <TouchableHighlight style={{ height: 50, borderColor: '#6c757d', borderBottomWidth: 1, backgroundColor: theme.backgroundColor }} onPress={() => this.deviceData(item)}>
-            <View style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2 }} >
-              <Text style={{ width: '70%', color: theme.color, marginLeft: 10, marginTop: 15 }}>{item['id']}</Text></View></TouchableHighlight>
-        } keyExtractor={item => item['id']} />
+        <FlatList
+          data={data}
+          style={{ height: '100%' }}
+          renderItem={({ item }) => (
+            <TouchableHighlight
+              style={{
+                height: 50,
+                borderColor: '#6c757d',
+                borderBottomWidth: 1,
+                backgroundColor: theme.backgroundColor,
+              }}
+              onPress={() => this.deviceData(item)}
+            >
+              <View
+                style={{
+                  width: '100%',
+                  marginLeft: 10,
+                  flexDirection: 'row',
+                  marginTop: -2,
+                }}
+              >
+                <Text
+                  style={{
+                    width: '70%',
+                    color: theme.color,
+                    marginLeft: 10,
+                    marginTop: 15,
+                  }}
+                >
+                  {item.id}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          )}
+          keyExtractor={item => item.id}
+        />
       );
     }
-  }
+  };
 
   public render(): React.ReactNode {
     const { themedStyle, title, backIcon } = this.props;
 
     if (this.state.searchbar == false) {
-      return (<SafeAreaView style={themedStyle.safeArea}>
-        <TopNavigation
-          alignment='center'
-          style={{ backgroundColor: theme.backgroundColor }}
-          subtitleStyle={textStyle.caption1}
-          leftControl={this.Control('left')}
-          rightControls={this.Control('right')}
-        />
-      </SafeAreaView>);
+      return (
+        <SafeAreaView style={themedStyle.safeArea}>
+          <TopNavigation
+            alignment='center'
+            style={{ backgroundColor: theme.backgroundColor }}
+            subtitleStyle={textStyle.caption1}
+            leftControl={this.Control('left')}
+            rightControls={this.Control('right')}
+          />
+        </SafeAreaView>
+      );
     } else {
       return (
         <SafeAreaView style={themedStyle.safeArea}>
           <SearchBar
             placeholder='Type Here...'
             platform={this.state.platform}
-            searchIcon={{ name: 'ios-search', color: theme.color, type: 'ionicon' }}
-            cancelIcon={{ name: 'ios-arrow-back', color: 'red', type: 'ionicon' }}
-            clearIcon={{ name: 'ios-close-circle', color: 'red', type: 'ionicon' }}
+            searchIcon={{
+              name: 'ios-search',
+              color: theme.color,
+              type: 'ionicon'
+            }}
+            cancelIcon={{
+              name: 'ios-arrow-back',
+              color: 'red',
+              type: 'ionicon'
+            }}
+            clearIcon={{
+              name: 'ios-close-circle',
+              color: 'red',
+              type: 'ionicon'
+            }}
             containerStyle={{ backgroundColor: theme.backgroundColor }}
-            inputStyle={{ backgroundColor: theme.color, color: theme.backgroundColor }}
+            inputStyle={{
+              backgroundColor: theme.color,
+              color: theme.backgroundColor,
+            }}
             onChangeText={this.updateSearch}
             value={this.state.search}
             cancelButtonProps={{ color: 'red' }}
-            onCancel={() => { this.closeSearchBar(); }}
+            onCancel={() => {
+              this.closeSearchBar();
+            }}
           />
           <ScrollView>{this.searchList()}</ScrollView>
         </SafeAreaView>
@@ -162,11 +238,14 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
   }
 }
 
-export const TopNavigationBar = withStyles(TopNavigationBarComponent, (theme: ThemeType) => ({
-  safeArea: {
-    backgroundColor: theme['background-basic-color-1'],
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-  },
-}));
+export const TopNavigationBar = withStyles(
+  TopNavigationBarComponent,
+  (theme: ThemeType) => ({
+    safeArea: {
+      backgroundColor: theme['background-basic-color-1'],
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.8,
+    },
+  }),
+);
