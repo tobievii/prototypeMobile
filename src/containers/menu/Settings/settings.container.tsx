@@ -31,7 +31,7 @@ export class SettingsViewContainer extends React.Component<NavigationScreenProps
         // account: undefined
     };
 
-    constructor(props) {
+    constructor(props: Readonly<NavigationScreenProps<import('react-navigation').NavigationParams, any>>) {
         super(props);
     }
 
@@ -121,14 +121,8 @@ const SignStackNavigator = createStackNavigator({
 });
 
 const AppDrawerNavigator = createDrawerNavigator({
-    _Admin: {
+    Admin: {
         screen: DashboardStackNavigator,
-    },
-    get Admin() {
-        return this._Admin;
-    },
-    set Admin(value) {
-        this._Admin = value;
     },
     Account: {
         screen: AccountNavigator,

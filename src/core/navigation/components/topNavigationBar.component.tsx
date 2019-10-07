@@ -89,7 +89,7 @@ export class TopNavigationBarComponent extends React.Component<TopNavigationBarP
   };
 
   Control = (control: string) => {
-    if (control == 'left') {
+    if (control === 'left') {
       return (<View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={{ marginRight: 20, opacity: 0.7 }} >
           <MaterialIcons name='add' size={24} color={theme.color} />

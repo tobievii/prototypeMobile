@@ -3,7 +3,7 @@ import { NavigationScreenProps } from 'react-navigation';
 import { AsyncStorage, ScrollView, Text, View, TouchableHighlight } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 const devices = require('../devices');
-import { url, version, theme } from '../../../app.component'
+import { url, version, theme } from '../../../app.component';
 export class DeviceListContainer extends React.Component<NavigationScreenProps> {
 
   state = {
@@ -14,7 +14,7 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
   UNSAFE_componentWillMount() {
     setInterval(() =>
       this.setState({ theme: theme })
-      , 1000)
+      , 1000);
   }
   private navigationKey: string = 'DeviceListContainer';
   getDeviceList = async () => {
@@ -85,7 +85,17 @@ export class DeviceListContainer extends React.Component<NavigationScreenProps> 
     } else {
       return (
         <ScrollView style={{ backgroundColor: theme.backgroundColor2 }}>
-          <TouchableHighlight style={{ width: '100%', marginLeft: 10, flexDirection: 'row', marginTop: -2, height: 50, borderColor: theme.color, borderBottomWidth: 1 }} onPress={() => { this.getDeviceList() }}>
+          <TouchableHighlight
+          style={{
+            width: '100%',
+            marginLeft: 10,
+            flexDirection: 'row',
+            marginTop: -2,
+            height: 50,
+            borderColor: theme.color,
+            borderBottomWidth: 1,
+             }}
+             onPress={() => { this.getDeviceList(); }}>
             <Text style={{ width: '70%', color: theme.color, marginLeft: 100, marginTop: 15, opacity: 0.5 }} >
               No devices to display.</Text>
           </TouchableHighlight>
