@@ -1,6 +1,6 @@
 import React from 'react';
 import { ImageRequireSource, AsyncStorage } from 'react-native';
-import { Themestate } from './components/common/themes/favorites.container'
+import { Themestate } from './components/common/themes/favorites.container';
 import { NavigationState } from 'react-navigation';
 import { mapping } from '@eva-design/eva';
 import { ApplicationProvider } from 'react-native-ui-kitten';
@@ -19,14 +19,15 @@ import {
   themes,
   ThemeStore,
 } from '../src/core/themes';
-const prod = "https://prototype.iotnxt.io"
-const dev = "https://prototype.dev.iotnxt.io"
-const newDev = "https://8bo.org"
-const v3 = "v3"//prod or dev
-const v4 = "v4"//8bo site
-export var url = newDev;
-export var version = v4
-export var theme;
+
+const prod = 'https://prototype.iotnxt.io';
+const dev = 'https://prototype.dev.iotnxt.io';
+const newDev = 'https://8bo.org';
+const v3 = 'v3'; // prod or dev
+const v4 = 'v4'; // 8bo site
+export let url = dev;
+export let version = v3;
+export let theme: { backgroundColor: any; backgroundColor2: any; color: any; value?: boolean; };
 const images: ImageRequireSource[] = [
 
 ];
@@ -46,28 +47,27 @@ interface State {
 
 export default class App extends React.Component<{}, State> {
   UNSAFE_componentWillMount() {
-    this.getTheme()
+    this.getTheme();
   }
 
   componentDidMount() {
     setInterval(() =>
       this.changeTheme()
-      , 5000)
+      , 5000);
   }
 
   changeTheme = () => {
     if (Themestate) {
-      theme = Themestate
+      theme = Themestate;
     }
   }
 
   getTheme = async () => {
-    var storedtheme = await AsyncStorage.getItem('Theme')
+    const storedtheme = await AsyncStorage.getItem('Theme');
     if (!storedtheme || storedtheme == null) {
-      theme = Themestate
-    }
-    else {
-      theme = JSON.parse(storedtheme)
+      theme = Themestate;
+    } else {
+      theme = JSON.parse(storedtheme);
     }
   }
   public state: State = {
@@ -88,6 +88,7 @@ export default class App extends React.Component<{}, State> {
     }
   };
 
+  // tslint:disable-next-line: no-shadowed-variable
   private onSwitchTheme = (theme: ThemeKey) => {
     ThemeStore.setTheme(theme).then(() => {
       this.setState({ theme });
