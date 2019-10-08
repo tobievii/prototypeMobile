@@ -1,27 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   AsyncStorage,
   View,
   Text,
   TouchableOpacity,
-  Image,
   TouchableHighlight,
-  Platform,
   StyleSheet,
+  Animated,
 } from 'react-native';
 import { url, theme } from '../../app.component';
-import { NavigationScreenProps, FlatList, ScrollView } from 'react-navigation';
+import { NavigationScreenProps, ScrollView } from 'react-navigation';
 import { FloatingAction } from 'react-native-floating-action';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { Icon } from '@expo/vector-icons/Ionicons';
+import { Button } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+import DialogInput from 'react-native-dialog-input';
 
 export const name = 'Iotnxt';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 interface GatewayProps {
   update: Function;
@@ -54,6 +51,9 @@ class Iotnxt extends React.Component<
     gatewayList: [],
     spinner: false,
     error: '',
+    isDialogVisible: false,
+    title: '',
+    message: '',
   };
 
   presets = {
@@ -84,6 +84,25 @@ class Iotnxt extends React.Component<
     });
   }
 
+  preset = async (name: string) => {
+    if (name === 'dev') {
+      this.setState({
+        title: 'Developoment Environment',
+        isDialogVisible: !this.state.isDialogVisible,
+      });
+    } else if (name === 'qa') {
+      this.setState({
+        title: 'Quality Assurance',
+        isDialogVisible: !this.state.isDialogVisible,
+      });
+    } else if (name === 'prod') {
+      this.setState({
+        title: 'Production Environment',
+        isDialogVisible: !this.state.isDialogVisible,
+      });
+    } else { return null; }
+  }
+
   getGateways = async () => {
     try {
       const user = JSON.parse(await AsyncStorage.getItem('user'));
@@ -98,7 +117,35 @@ class Iotnxt extends React.Component<
       this.setState({ gatewayList: data, loading: false });
     } catch (err) {
       this.setState({ gatewayList: err, loading: false, error: err });
+      // tslint:disable-next-line: no-console
       console.log('Error fetching data:', err);
+    }
+  };
+
+  addGateways = async (name: any) => {
+    try {
+      const user = JSON.parse(await AsyncStorage.getItem('user'));
+      const gateways = await fetch(url + '/api/v3/iotnxt/addgateway', {
+        method: 'POST',
+        headers: {
+          Authorization: user.auth,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          GatewayId: name,
+          HostAddress: this.state.addGatewayForm.HostAddress,
+          PublicKey: this.state.addGatewayForm.PublicKey,
+          Secret: this.state.addGatewayForm.Secret,
+        }),
+      });
+      const response = await gateways.json();
+      this.setState({
+        isDialogVisible: !this.state.isDialogVisible,
+      });
+      this.getGateways();
+    } catch (err) {
+      // tslint:disable-next-line: no-console
+      console.log('Error adding gateway:', err);
     }
   };
 
@@ -143,34 +190,44 @@ class Iotnxt extends React.Component<
   };
 
   render() {
+    const connecting = (
+      <Ionicons name='md-checkmark-circle' size={32} color='yellow' />
+    );
+    const connected = (
+      <Ionicons name='md-checkmark-circle' size={32} color='green' />
+    );
+    const failed = (
+      <Ionicons name='md-checkmark-circle' size={32} color='red' />
+    );
+
     const { gatewayList, loading } = this.state;
-    const actions = [
+    const env = [
       {
-        text: 'Prod',
-        name: 'bt_Prod',
+        text: 'PROD',
+        name: 'prod',
         position: 1,
       },
       {
-        text: 'Dev',
-        name: 'bt_Dev',
+        text: 'DEV',
+        name: 'dev',
         position: 2,
       },
       {
         text: 'QA',
-        name: 'bt_QA',
+        name: 'qa',
         position: 3,
       },
     ];
-    if (loading) {
-        return(
-            <Spinner
-            visible={this.state.spinner}
-            textContent={'Fetching Gateways...'}
-            textStyle={styles.spinnerTextStyle}
-          />
-        );
 
-      } else if (!loading) {
+    if (loading) {
+      return (
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Fetching Gateways...'}
+          textStyle={styles.spinnerTextStyle}
+        />
+      );
+    } else if (!loading) {
       return (
         <View
           style={{
@@ -197,6 +254,7 @@ class Iotnxt extends React.Component<
                     marginTop: -2,
                   }}
                 >
+                  <Text>{item.connected ? connected : 'connected'}</Text>
                   <Text
                     style={{
                       width: '70%',
@@ -211,16 +269,28 @@ class Iotnxt extends React.Component<
               </TouchableHighlight>
             ))}
           </ScrollView>
-          <View>
-            <FloatingAction
-              actions={actions}
-              color='maroon'
-              // tslint:disable-next-line: no-shadowed-variable
-              onPressItem={name => {
-                console.log(`selected button: ${name}`);
-              }}
-            />
-          </View>
+          <FloatingAction
+            actions={env}
+            color='maroon'
+            // tslint:disable-next-line: no-shadowed-variable
+            onPressItem={name => {
+            this.preset(name);
+            }}
+          />
+        <DialogInput
+          isDialogVisible={this.state.isDialogVisible}
+          title={this.state.title}
+          message={'Enter Gateway name'}
+          hintInput={'Gateway'}
+          submitInput={(inputText: any) => {
+            this.addGateways(inputText);
+          }}
+          closeDialog={() => {
+            this.setState({
+              isDialogVisible: !this.state.isDialogVisible,
+            });
+          }}
+        ></DialogInput>
         </View>
       );
     } else {
@@ -319,17 +389,20 @@ const styles = StyleSheet.create({
   spinnerTextStyle: {
     color: '#FFF',
   },
+
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
+
   welcome: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },
+
   instructions: {
     textAlign: 'center',
     color: '#333333',
