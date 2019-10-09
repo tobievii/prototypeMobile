@@ -54,6 +54,10 @@ class Iotnxt extends React.Component<
     isDialogVisible: false,
     title: '',
     message: '',
+    Secret: this.generateDifficult(16),
+    HostAddress: 'greenqueue.prod.iotnxt.io',
+    PublicKey:
+      '<RSAKeyValue><Exponent>AQAB</Exponent><Modulus>rbltknM3wO5/TAEigft0RDlI6R9yPttweDXtmXjmpxwcuVtqJgNbIQ3VduGVlG6sOg20iEbBWMCdwJ3HZTrtn7qpXRdJBqDUNye4Xbwp1Dp+zMFpgEsCklM7c6/iIq14nymhNo9Cn3eBBM3yZzUKJuPn9CTZSOtCenSbae9X9bnHSW2qB1qRSQ2M03VppBYAyMjZvP1wSDVNuvCtjU2Lg/8o/t231E/U+s1Jk0IvdD6rLdoi91c3Bmp00rVMPxOjvKmOjgPfE5LESRPMlUli4kJFWxBwbXuhFY+TK2I+BUpiYYKX+4YL3OFrn/EpO4bNcI0NHelbWGqZg57x7rNe9Q==</Modulus></RSAKeyValue>',
   };
 
   presets = {
@@ -89,16 +93,22 @@ class Iotnxt extends React.Component<
       this.setState({
         title: 'Developoment Environment',
         isDialogVisible: !this.state.isDialogVisible,
+        HostAddress: this.presets.dev.HostAddress,
+        PublicKey: this.presets.dev.PublicKey,
       });
     } else if (name === 'qa') {
       this.setState({
         title: 'Quality Assurance',
         isDialogVisible: !this.state.isDialogVisible,
+        HostAddress: this.presets.qa.HostAddress,
+        PublicKey: this.presets.qa.PublicKey,
       });
     } else if (name === 'prod') {
       this.setState({
         title: 'Production Environment',
         isDialogVisible: !this.state.isDialogVisible,
+        HostAddress: this.presets.prod.HostAddress,
+        PublicKey: this.presets.prod.PublicKey,
       });
     } else { return null; }
   }
@@ -133,9 +143,9 @@ class Iotnxt extends React.Component<
         },
         body: JSON.stringify({
           GatewayId: name,
-          HostAddress: this.state.addGatewayForm.HostAddress,
-          PublicKey: this.state.addGatewayForm.PublicKey,
-          Secret: this.state.addGatewayForm.Secret,
+          HostAddress: this.state.HostAddress,
+          PublicKey: this.state.PublicKey,
+          Secret: this.state.Secret,
         }),
       });
       const response = await gateways.json();
