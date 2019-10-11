@@ -82,11 +82,8 @@ class Iotnxt extends React.Component<
 
   componentWillMount() {
 	  this.getGateways();
-	  setTimeout(() => { this.getGateways(); }, 500)
-	  setTimeout(() => { this.getGateways(); }, 2500)
-	  setTimeout(() => { this.getGateways(); }, 5000)
-	  setTimeout(() => { this.getGateways(); }, 7500)
-	  setTimeout(() => { this.getGateways(); }, 10000)
+	  setInterval(() => { this.getGateways(); }, 5000)
+
   }
 
   async componentDidMount() {
@@ -290,7 +287,7 @@ reconnect=(gatewayId: any,Hostaddress: any)=>(
 </TouchableOpacity>)
 
 connectedStatus = (_connected: any) => {
-	if (_connected === 'connected') {
+	if (_connected === true) {
 		return (
 			<Ionicons name='md-checkmark-circle' size={32} color='green' />		
 		)
